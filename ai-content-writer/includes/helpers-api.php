@@ -16,69 +16,6 @@ function aicw_get_decrypted_key($option) {
     return $enc ? base64_decode($enc) : '';
 }
 
-/**
- * ✅ Generate AI Image via OpenAI based on prompt (no placeholder required)
- */
-function aicw_generate_image_url($prompt) {
-    $api_key = 'sk-your-stability-key'; // Replace with valid key
-    $api_url = 'https://api.stability.ai/v2beta/stable-image/generate/core';
-
-    $response = wp_remote_post($api_url, [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $api_key,
-            'Accept'        => 'image/jpg',
-        ],
-        'body' => [
-            'model'        => 'core',
-            'prompt'       => sanitize_text_field($prompt),
-            'aspect_ratio' => '16:9', // or try "1:1"
-        ],
-        'timeout' => 90,
-    ]);
-
-    if (is_wp_error($response)) {
-        error_log('Stability API Error: ' . $response->get_error_message());
-        return aicw_generate_unsplash_image($prompt);
-    }
-
-    $code = wp_remote_retrieve_response_code($response);
-    if ($code !== 200) {
-        $body = wp_remote_retrieve_body($response);
-        error_log('ℹ️ Stability API Error: ' . print_r(json_decode($body, true), true));
-        return aicw_generate_unsplash_image($prompt);
-    }
-
-    $image_data = wp_remote_retrieve_body($response);
-    $upload_dir = wp_upload_dir();
-    $filename   = 'ai-image-' . sanitize_title($prompt) . '-' . time() . '.jpg';
-    $filepath   = trailingslashit($upload_dir['path']) . $filename;
-
-    if (!file_put_contents($filepath, $image_data)) {
-        error_log("Stability: Failed to write file, fallback to Unsplash.");
-        return aicw_generate_unsplash_image($prompt);
-    }
-
-    require_once(ABSPATH . 'wp-admin/includes/file.php');
-    require_once(ABSPATH . 'wp-admin/includes/media.php');
-    require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-    $attachment_id = media_handle_sideload([
-        'name'     => $filename,
-        'tmp_name' => $filepath,
-    ]);
-
-    if (is_wp_error($attachment_id)) {
-        error_log("Stability sideload failed: {$attachment_id->get_error_message()}");
-        return aicw_generate_unsplash_image($prompt);
-    }
-
-    return [
-        'image_id' => $attachment_id,
-        'image_status' => 'stability_success',
-        'image_message' => '✅ Image generated using Stability AI.'
-    ];
-}
-
 
 /**
  * ✅ Validate Gemini API key

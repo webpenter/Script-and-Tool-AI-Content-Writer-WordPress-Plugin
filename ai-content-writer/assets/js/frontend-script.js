@@ -10,7 +10,7 @@ jQuery(document).ready(function ($) {
         
         topic: $('#aicw_topic'),
         existing: $('#aicw_existing'),
-        withImage: $('#aicw_with_image'), // Re-added
+        withImage: $('#aicw_with_image'),
         
         generateBtn: $('#aicw_generate_btn'),
         spinner: $('.aicw-spinner'),
@@ -21,13 +21,36 @@ jQuery(document).ready(function ($) {
         saveDraftBtn: $('#aicw_save_draft_btn'),
         copyMessage: $('.aicw-copy-message'),
         
-        imagePreviewWrap: $('#aicw_image_preview_wrap'), // New
-        imagePreview: $('#aicw_image_preview'),           // New
-        imageStatus: $('#aicw_image_status')              // New
+        imagePreviewWrap: $('#aicw_image_preview_wrap'),
+        imagePreview: $('#aicw_image_preview'),
+        imageStatus: $('#aicw_image_status')
     };
+
+    // 🔹 Global variable to store the last generated image ID
+    let lastGeneratedImageId = 0;
 
     // 🔹 Collect form data efficiently
     window.getAICWData = function () {
+        // Get post ID from WordPress
+        let post_id = 0;
+        
+        // Try to get post ID from WordPress editor
+        if (typeof wp !== 'undefined' && wp.data && wp.data.select('core/editor')) {
+            try {
+                post_id = wp.data.select('core/editor').getCurrentPostId() || 0;
+            } catch (e) {
+                console.log("Could not get post ID from editor:", e);
+            }
+        }
+        
+        // Try to get from URL (for edit post page)
+        if (!post_id) {
+            const urlParams = new URLSearchParams(window.location.search);
+            post_id = urlParams.get('post') || 0;
+        }
+        
+        console.log("📝 Current Post ID:", post_id);
+        
         const data = {
             action: 'aicw_generate_content',
             nonce: aicwAjax.nonce,
@@ -37,8 +60,10 @@ jQuery(document).ready(function ($) {
             keywords: elements.keywords.val()?.trim() || '',
             topic: elements.topic.val()?.trim() || '',
             existing: elements.existing.val()?.trim() || '',
-            with_image: elements.withImage.is(':checked') ? 1 : 0 // Re-added
+            with_image: elements.withImage.is(':checked') ? 1 : 0,
+            post_id: post_id,
         };
+        
         console.log("📦 AJAX Data to send:", data);
         return data;
     };
@@ -68,7 +93,7 @@ jQuery(document).ready(function ($) {
             topicWrap.hide();
             rewriteWrap.slideDown();
             elements.topic.val('');
-            elements.withImage.prop('checked', false).prop('disabled', true); // Disable image on rewrite mode
+            elements.withImage.prop('checked', false).prop('disabled', true);
         } else {
             label.text('Topic or Prompt');
             topicWrap.show();
@@ -78,97 +103,195 @@ jQuery(document).ready(function ($) {
         }
     }
 
-    // 🔹 Optimized Generate Content with debouncing
-    const handleGenerateContent = debounce(function (e) {
-        e.preventDefault();
-        console.log("🚀 Generate button clicked");
+// 🔹 Optimized Generate Content with debouncing
+const handleGenerateContent = debounce(function (e) {
+    e.preventDefault();
+    console.log("🚀 Generate button clicked");
 
-        const data = getAICWData();
+    const data = getAICWData();
 
-        // Quick validation
-        if (data.content_type === 'rewrite' && !data.existing) {
-            alert('Please paste the text you want to rewrite.');
-            return;
-        } else if (data.content_type !== 'rewrite' && !data.topic) {
-            alert('Please enter a topic or prompt.');
-            return;
-        }
+    // Quick validation
+    if (data.content_type === 'rewrite' && !data.existing) {
+        alert('Please paste the text you want to rewrite.');
+        return;
+    } else if (data.content_type !== 'rewrite' && !data.topic) {
+        alert('Please enter a topic or prompt.');
+        return;
+    }
 
-        // UI updates
-        elements.errorMessage.hide();
-        elements.resultSection.hide();
-        elements.imagePreviewWrap.hide(); // Hide image preview before new generation
-        elements.spinner.show();
-        elements.generateBtn.prop('disabled', true);
+    // UI updates
+    elements.errorMessage.hide();
+    elements.resultSection.hide();
+    elements.imagePreviewWrap.hide();
+    elements.spinner.show();
+    elements.generateBtn.prop('disabled', true);
 
-        // 🔹 Add timeout for AJAX request
-        const ajaxPromise = $.ajax({
-            url: aicwAjax.ajax_url,
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            timeout: 60000 // Increased timeout for potential image generation
-        });
+    // 🔹 AJAX request
+    const ajaxPromise = $.ajax({
+        url: aicwAjax.ajax_url,
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        timeout: 60000
+    });
 
-        // Handle AJAX with timeout
-        $.when(ajaxPromise).then(
-            function (response) {
-                console.log("✅ AJAX success:", response);
-                elements.spinner.hide();
-                elements.generateBtn.prop('disabled', false);
+    // Handle AJAX response
+    $.when(ajaxPromise).then(
+        function (response) {
+            console.log("✅ AJAX success:", response);
+            elements.spinner.hide();
+            elements.generateBtn.prop('disabled', false);
 
-                if (response && response.success) {
-                    $('#aicw_result').val(response.data.content);
-                    elements.resultSection.show();
+            if (response && response.success) {
+                $('#aicw_result').val(response.data.content);
+                elements.resultSection.show();
+                
+                // ✅ Store the image ID for later use
+                if (response.data.image_id && response.data.image_id > 0) {
+                    lastGeneratedImageId = response.data.image_id;
+                    console.log("📸 Stored image ID:", lastGeneratedImageId);
                     
-                    // Handle Image Response with Status and Message
+                    // Store in hidden field
+                    $('#aicw_last_image_id').remove();
+                    $('<input>').attr({
+                        type: 'hidden',
+                        id: 'aicw_last_image_id',
+                        value: lastGeneratedImageId
+                    }).appendTo('body');
+                    
+                    // Store in image preview data attribute
                     if (response.data.image_url) {
-                        elements.imagePreview.attr('src', response.data.image_url);
-                        elements.imagePreviewWrap.show();
+                        elements.imagePreview.data('attachment-id', lastGeneratedImageId);
+                    }
+                }
+                
+                // Handle Image Response
+                if (response.data.image_url) {
+                    elements.imagePreview.attr('src', response.data.image_url);
+                    elements.imagePreviewWrap.show();
 
-                        // Update status message based on status code
-                        let statusHtml = '';
-                        // FIX: Directly use the message from the backend (response.data.image_message)
-                        const imageMessage = response.data.image_message || 'Unknown image status received.';
-                        
-                        if (response.data.image_status === 'success') {
-                            statusHtml = '<span style="color: green; font-weight: 600;">✅ Success: </span>' + imageMessage;
-                        } else if (response.data.image_status === 'placeholder_fallback') {
-                             // Use yellow/orange for placeholder fallback
-                            statusHtml = '<span style="color: #ff9900; font-weight: 600;">⚠️ Placeholder: </span>' + imageMessage;
-                        } else {
-                            // Use red for hard errors
-                            statusHtml = '<span style="color: red; font-weight: 600;">❌ Error: </span>' + imageMessage;
-                        }
-                        elements.imageStatus.html(statusHtml);
-
+                    // Build status message
+                    let statusHtml = '';
+                    const imageMessage = response.data.image_message || 'Image generated';
+                    
+                    if (response.data.image_status === 'success' || response.data.image_status === 'pixabay_success') {
+                        statusHtml = '<span style="color: green; font-weight: 600;">✅ Success: </span>' + imageMessage;
+                    } else if (response.data.image_status === 'placeholder_fallback') {
+                        statusHtml = '<span style="color: #ff9900; font-weight: 600;">⚠️ Placeholder: </span>' + imageMessage;
                     } else {
-                        elements.imagePreviewWrap.hide();
+                        statusHtml = '<span style="color: red; font-weight: 600;">❌ Error: </span>' + imageMessage;
                     }
                     
+                    // Add image ID to status
+                    if (response.data.image_id) {
+                        statusHtml += ' <span style="color: #666;">(ID: ' + response.data.image_id + ')</span>';
+                    }
+                    
+                    // Add featured image status
+                    if (response.data.featured_set) {
+                        if (response.data.featured_set === 'yes') {
+                            statusHtml += ' <span style="color: green;">(Featured ✓)</span>';
+                            
+                            // 🔥 CRITICAL: Try to refresh WordPress featured image UI
+                            refreshFeaturedImageUI(response.data.image_id, response.data.image_url);
+                            
+                        } else if (response.data.featured_set === 'no') {
+                            statusHtml += ' <span style="color: orange;">(Featured ✗)</span>';
+                        }
+                    }
+                    
+                    elements.imageStatus.html(statusHtml);
                 } else {
-                    // This section handles content generation errors, not image errors
-                    const msg = response?.data?.message || response?.message || 'Unknown error occurred.';
-                    elements.errorMessage.text(msg).show();
+                    elements.imagePreviewWrap.hide();
                 }
-            },
-            function (xhr, status, error) {
-                console.error("❌ AJAX error:", status, error);
-                elements.spinner.hide();
-                elements.generateBtn.prop('disabled', false);
                 
-                if (status === 'timeout') {
-                    elements.errorMessage.text('Request timeout. Please try again.').show();
-                } else {
-                    elements.errorMessage.text('Error occurred. Please try again.').show();
-                }
+            } else {
+                const msg = response?.data?.message || response?.message || 'Unknown error occurred.';
+                elements.errorMessage.text(msg).show();
             }
-        );
-    }, 500); // 500ms debounce
+        },
+        function (xhr, status, error) {
+            console.error("❌ AJAX error:", status, error, xhr.responseText);
+            elements.spinner.hide();
+            elements.generateBtn.prop('disabled', false);
+            
+            if (status === 'timeout') {
+                elements.errorMessage.text('Request timeout. Please try again.').show();
+            } else {
+                elements.errorMessage.text('Error occurred: ' + error).show();
+            }
+        }
+    );
+}, 500);
 
-    // Event handlers
-    elements.contentType.on('change', handleContentTypeChange);
-    elements.generateBtn.on('click', handleGenerateContent);
+// 🔥 Function to refresh WordPress featured image UI
+function refreshFeaturedImageUI(imageId, imageUrl) {
+    console.log("🔄 Attempting to refresh featured image UI for ID:", imageId);
+    
+    // Method 1: Use WordPress REST API if available
+    if (typeof wp !== 'undefined' && wp.data && wp.data.dispatch) {
+        try {
+            // Update the post's featured image in WordPress store
+            wp.data.dispatch('core/editor').editPost({
+                featured_media: imageId
+            });
+            
+            console.log("✅ Updated featured image via WordPress data store");
+            
+            // Force a UI refresh
+            setTimeout(() => {
+                if (wp.data && wp.data.dispatch && wp.data.dispatch('core/editor').refreshPost) {
+                    wp.data.dispatch('core/editor').refreshPost();
+                    console.log("✅ Refreshed post data");
+                }
+            }, 1000);
+            
+        } catch (error) {
+            console.log("⚠️ Could not update via WordPress store:", error);
+        }
+    }
+    
+    // Method 2: Simulate a click on the featured image to refresh it
+    setTimeout(() => {
+        const featuredImageContainer = document.querySelector('.editor-post-featured-image');
+        if (featuredImageContainer) {
+            console.log("🔄 Found featured image container, attempting refresh...");
+            
+            // Method 2a: Update the image src directly
+            const existingImage = featuredImageContainer.querySelector('img');
+            if (existingImage && imageUrl) {
+                existingImage.src = imageUrl;
+                console.log("✅ Updated image src directly");
+            }
+            
+            // Method 2b: Trigger a custom event
+            const event = new CustomEvent('aicw-featured-image-updated', {
+                detail: { imageId: imageId, imageUrl: imageUrl }
+            });
+            document.dispatchEvent(event);
+        }
+    }, 500);
+    
+    // Method 3: Show notification to refresh page
+    setTimeout(() => {
+        if (!document.querySelector('.aicw-refresh-notice')) {
+            const notice = document.createElement('div');
+            notice.className = 'notice notice-info aicw-refresh-notice is-dismissible';
+            notice.style.cssText = 'margin: 10px 0; padding: 10px; background: #f0f6fc; border-left: 4px solid #72aee6;';
+            notice.innerHTML = `
+                <p><strong>Featured Image Updated!</strong> The image has been set as featured. If it doesn't appear, please refresh the page or click on the featured image area.</p>
+                <button type="button" class="notice-dismiss" onclick="this.parentElement.remove()">
+                    <span class="screen-reader-text">Dismiss this notice.</span>
+                </button>
+            `;
+            
+            const adminNotices = document.querySelector('.wrap h1').parentNode;
+            if (adminNotices) {
+                adminNotices.insertBefore(notice, adminNotices.firstChild);
+            }
+        }
+    }, 1000);
+}
 
     // Copy result button
     elements.copyBtn.on('click', function () {
@@ -188,6 +311,40 @@ jQuery(document).ready(function ($) {
             return;
         }
 
+        // Get image ID from multiple sources
+        let image_id = 0;
+        
+        // 1. Try global variable
+        if (lastGeneratedImageId > 0) {
+            image_id = lastGeneratedImageId;
+        }
+        
+        // 2. Try hidden field
+        if (!image_id) {
+            const hiddenId = $('#aicw_last_image_id').val();
+            if (hiddenId && parseInt(hiddenId) > 0) {
+                image_id = parseInt(hiddenId);
+            }
+        }
+        
+        // 3. Try data attribute from image preview
+        if (!image_id && elements.imagePreviewWrap.is(':visible')) {
+            const storedId = elements.imagePreview.data('attachment-id');
+            if (storedId) {
+                image_id = parseInt(storedId);
+            }
+        }
+        
+        console.log("💾 Saving draft with:", {
+            contentLength: content.length,
+            image_id: image_id,
+            hasImage: elements.imagePreviewWrap.is(':visible')
+        });
+        
+        // Show loading state
+        const originalText = elements.saveDraftBtn.text();
+        elements.saveDraftBtn.prop('disabled', true).text('Saving...');
+        
         $.ajax({
             url: aicwAjax.ajax_url,
             type: 'POST',
@@ -195,26 +352,68 @@ jQuery(document).ready(function ($) {
                 action: 'aicw_save_draft',
                 nonce: aicwAjax.nonce,
                 title: 'AI Generated Content',
-                content: content
+                content: content,
+                image_id: image_id
             },
             dataType: 'json',
+            timeout: 30000,
             success: function (response) {
+                console.log("💾 Save draft response:", response);
+                elements.saveDraftBtn.prop('disabled', false).text(originalText);
+                
                 if (response && response.success) {
-                    alert(response.data.message);
-                    if (response.data.edit_url) {
-                        window.open(response.data.edit_url, '_blank');
+                    let message = response.data.message;
+                    if (response.data.featured_set === 'yes') {
+                        message += '\n✅ Featured image set!';
+                    } else if (image_id > 0) {
+                        message += '\n⚠️ Image saved in media library';
                     }
+                    
+                    alert(message);
+                    
+                    // Open edit page after a short delay
+                    if (response.data.edit_url) {
+                        setTimeout(() => {
+                            window.open(response.data.edit_url, '_blank');
+                        }, 500);
+                    }
+                    
                 } else {
                     const msg = response?.data?.message || 'Failed to save draft.';
-                    alert(msg);
+                    alert('❌ ' + msg);
                 }
             },
-            error: function (xhr) {
-                console.error("❌ Save draft error:", xhr.responseText);
-                alert('Error saving draft.');
+            error: function (xhr, status, error) {
+                console.error("❌ Save draft error:", {
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText,
+                    readyState: xhr.readyState,
+                    statusCode: xhr.status
+                });
+                
+                elements.saveDraftBtn.prop('disabled', false).text(originalText);
+                
+                let errorMsg = 'Error saving draft. ';
+                if (status === 'timeout') {
+                    errorMsg += 'Request timed out.';
+                } else if (xhr.responseText) {
+                    try {
+                        const jsonResponse = JSON.parse(xhr.responseText);
+                        errorMsg += jsonResponse.message || jsonResponse.data?.message || '';
+                    } catch (e) {
+                        errorMsg += 'Server error occurred.';
+                    }
+                }
+                
+                alert('❌ ' + errorMsg);
             }
         });
     });
+
+    // Event handlers
+    elements.contentType.on('change', handleContentTypeChange);
+    elements.generateBtn.on('click', handleGenerateContent);
 
     // Initialize
     handleContentTypeChange();

@@ -16,7 +16,6 @@ function aicw_get_decrypted_key($option) {
     return $enc ? base64_decode($enc) : '';
 }
 
-
 /**
  * ✅ Validate Gemini API key
  */

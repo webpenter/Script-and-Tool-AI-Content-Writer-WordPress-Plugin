@@ -107,7 +107,7 @@ endif;
                 <img id="aicw_image_preview" src="" style="max-width: 100%; height: auto; border-radius: 6px; display: block;" alt="<?php esc_attr_e('AI Generated Image', 'ai-content-writer'); ?>">
                 <p id="aicw_image_status" style="margin-top: 10px;"></p>
             </div>
-            <textarea id="aicw_result" rows="15" style="width: 100%; height: 80%;" readonly></textarea>
+            <textarea id="aicw_result" rows="15" style="width: 100%;" readonly></textarea>
             <div class="aicw-copy-message" style="display:none;"><span>✅</span> <?php _e('Copied!', 'ai-content-writer'); ?></div>
         </div>
 

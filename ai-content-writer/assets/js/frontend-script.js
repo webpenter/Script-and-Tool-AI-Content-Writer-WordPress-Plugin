@@ -28,6 +28,19 @@ jQuery(document).ready(function ($) {
 
     // 🔹 Global variable to store the last generated image ID
     let lastGeneratedImageId = 0;
+    
+    // 🔹 Retry configuration
+    const RETRY_CONFIG = {
+        maxRetries: 3,
+        retryDelay: 3000, // 3 seconds
+        retryMessages: [
+            'Model overloaded',
+            'try again',
+            'service unavailable',
+            '503',
+            '429'
+        ]
+    };
 
     // 🔹 Collect form data efficiently
     window.getAICWData = function () {
@@ -81,6 +94,82 @@ jQuery(document).ready(function ($) {
         };
     }
 
+    // 🔹 Check if error message indicates retry is needed
+    function shouldRetry(errorMessage) {
+        if (!errorMessage) return false;
+        const lowerMsg = errorMessage.toLowerCase();
+        return RETRY_CONFIG.retryMessages.some(msg => lowerMsg.includes(msg));
+    }
+
+    // 🔹 Update button text with retry countdown
+    function updateButtonWithCountdown(seconds, attemptNumber) {
+        const countdown = setInterval(() => {
+            if (seconds > 0) {
+                elements.generateBtn.text(`Retrying in ${seconds}s... (Attempt ${attemptNumber}/${RETRY_CONFIG.maxRetries})`);
+                seconds--;
+            } else {
+                clearInterval(countdown);
+            }
+        }, 1000);
+        return countdown;
+    }
+
+    // 🔹 Main AJAX request with retry logic
+    function makeAjaxRequest(data, attemptNumber = 1) {
+        console.log(`🔄 Attempt ${attemptNumber}/${RETRY_CONFIG.maxRetries}`);
+        
+        return $.ajax({
+            url: aicwAjax.ajax_url,
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            timeout: 60000
+        }).then(
+            function (response) {
+                // Success handler
+                return Promise.resolve(response);
+            },
+            function (xhr, status, error) {
+                // Error handler - check if we should retry
+                let errorMessage = '';
+                
+                try {
+                    const jsonResponse = JSON.parse(xhr.responseText);
+                    errorMessage = jsonResponse?.data?.message || jsonResponse?.message || error;
+                } catch (e) {
+                    errorMessage = error || status;
+                }
+                
+                console.log(`❌ Attempt ${attemptNumber} failed:`, errorMessage);
+                
+                // Check if we should retry
+                if (shouldRetry(errorMessage) && attemptNumber < RETRY_CONFIG.maxRetries) {
+                    console.log(`⏳ Will retry after ${RETRY_CONFIG.retryDelay / 1000} seconds...`);
+                    
+                    // Show countdown
+                    let secondsLeft = Math.floor(RETRY_CONFIG.retryDelay / 1000);
+                    const countdown = updateButtonWithCountdown(secondsLeft, attemptNumber + 1);
+                    
+                    elements.errorMessage
+                        .html(`⚠️ ${errorMessage}<br>Retrying automatically... (Attempt ${attemptNumber}/${RETRY_CONFIG.maxRetries})`)
+                        .show();
+                    
+                    // Wait and retry
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            clearInterval(countdown);
+                            elements.generateBtn.text('Generating...');
+                            resolve(makeAjaxRequest(data, attemptNumber + 1));
+                        }, RETRY_CONFIG.retryDelay);
+                    });
+                }
+                
+                // No more retries or different error
+                return Promise.reject({ status, error, errorMessage, xhr });
+            }
+        );
+    }
+
     // 🔹 Handle Content Type Change
     function handleContentTypeChange() {
         const selected = elements.contentType.val();
@@ -103,195 +192,191 @@ jQuery(document).ready(function ($) {
         }
     }
 
-// 🔹 Optimized Generate Content with debouncing
-const handleGenerateContent = debounce(function (e) {
-    e.preventDefault();
-    console.log("🚀 Generate button clicked");
+    // 🔹 Optimized Generate Content with retry logic
+    const handleGenerateContent = debounce(function (e) {
+        e.preventDefault();
+        console.log("🚀 Generate button clicked");
 
-    const data = getAICWData();
+        const data = getAICWData();
 
-    // Quick validation
-    if (data.content_type === 'rewrite' && !data.existing) {
-        alert('Please paste the text you want to rewrite.');
-        return;
-    } else if (data.content_type !== 'rewrite' && !data.topic) {
-        alert('Please enter a topic or prompt.');
-        return;
-    }
+        // Quick validation
+        if (data.content_type === 'rewrite' && !data.existing) {
+            alert('Please paste the text you want to rewrite.');
+            return;
+        } else if (data.content_type !== 'rewrite' && !data.topic) {
+            alert('Please enter a topic or prompt.');
+            return;
+        }
 
-    // UI updates
-    elements.errorMessage.hide();
-    elements.resultSection.hide();
-    elements.imagePreviewWrap.hide();
-    elements.spinner.show();
-    elements.generateBtn.prop('disabled', true);
+        // UI updates
+        elements.errorMessage.hide();
+        elements.resultSection.hide();
+        elements.imagePreviewWrap.hide();
+        elements.spinner.show();
+        elements.generateBtn.prop('disabled', true).text('Generating...');
 
-    // 🔹 AJAX request
-    const ajaxPromise = $.ajax({
-        url: aicwAjax.ajax_url,
-        type: 'POST',
-        data: data,
-        dataType: 'json',
-        timeout: 60000
-    });
+        // 🔹 Make AJAX request with retry logic
+        makeAjaxRequest(data)
+            .then(function (response) {
+                console.log("✅ AJAX success:", response);
+                elements.spinner.hide();
+                elements.generateBtn.prop('disabled', false).text('Generate Content');
+                elements.errorMessage.hide();
 
-    // Handle AJAX response
-    $.when(ajaxPromise).then(
-        function (response) {
-            console.log("✅ AJAX success:", response);
-            elements.spinner.hide();
-            elements.generateBtn.prop('disabled', false);
-
-            if (response && response.success) {
-                $('#aicw_result').val(response.data.content);
-                elements.resultSection.show();
-                
-                // ✅ Store the image ID for later use
-                if (response.data.image_id && response.data.image_id > 0) {
-                    lastGeneratedImageId = response.data.image_id;
-                    console.log("📸 Stored image ID:", lastGeneratedImageId);
+                if (response && response.success) {
+                    $('#aicw_result').val(response.data.content);
+                    elements.resultSection.show();
                     
-                    // Store in hidden field
-                    $('#aicw_last_image_id').remove();
-                    $('<input>').attr({
-                        type: 'hidden',
-                        id: 'aicw_last_image_id',
-                        value: lastGeneratedImageId
-                    }).appendTo('body');
-                    
-                    // Store in image preview data attribute
-                    if (response.data.image_url) {
-                        elements.imagePreview.data('attachment-id', lastGeneratedImageId);
-                    }
-                }
-                
-                // Handle Image Response
-                if (response.data.image_url) {
-                    elements.imagePreview.attr('src', response.data.image_url);
-                    elements.imagePreviewWrap.show();
-
-                    // Build status message
-                    let statusHtml = '';
-                    const imageMessage = response.data.image_message || 'Image generated';
-                    
-                    if (response.data.image_status === 'success' || response.data.image_status === 'pixabay_success') {
-                        statusHtml = '<span style="color: green; font-weight: 600;">✅ Success: </span>' + imageMessage;
-                    } else if (response.data.image_status === 'placeholder_fallback') {
-                        statusHtml = '<span style="color: #ff9900; font-weight: 600;">⚠️ Placeholder: </span>' + imageMessage;
-                    } else {
-                        statusHtml = '<span style="color: red; font-weight: 600;">❌ Error: </span>' + imageMessage;
-                    }
-                    
-                    // Add image ID to status
-                    if (response.data.image_id) {
-                        statusHtml += ' <span style="color: #666;">(ID: ' + response.data.image_id + ')</span>';
-                    }
-                    
-                    // Add featured image status
-                    if (response.data.featured_set) {
-                        if (response.data.featured_set === 'yes') {
-                            statusHtml += ' <span style="color: green;">(Featured ✓)</span>';
-                            
-                            // 🔥 CRITICAL: Try to refresh WordPress featured image UI
-                            refreshFeaturedImageUI(response.data.image_id, response.data.image_url);
-                            
-                        } else if (response.data.featured_set === 'no') {
-                            statusHtml += ' <span style="color: orange;">(Featured ✗)</span>';
+                    // ✅ Store the image ID for later use
+                    if (response.data.image_id && response.data.image_id > 0) {
+                        lastGeneratedImageId = response.data.image_id;
+                        console.log("📸 Stored image ID:", lastGeneratedImageId);
+                        
+                        // Store in hidden field
+                        $('#aicw_last_image_id').remove();
+                        $('<input>').attr({
+                            type: 'hidden',
+                            id: 'aicw_last_image_id',
+                            value: lastGeneratedImageId
+                        }).appendTo('body');
+                        
+                        // Store in image preview data attribute
+                        if (response.data.image_url) {
+                            elements.imagePreview.data('attachment-id', lastGeneratedImageId);
                         }
                     }
                     
-                    elements.imageStatus.html(statusHtml);
+                    // Handle Image Response
+                    if (response.data.image_url) {
+                        elements.imagePreview.attr('src', response.data.image_url);
+                        elements.imagePreviewWrap.show();
+
+                        // Build status message
+                        let statusHtml = '';
+                        const imageMessage = response.data.image_message || 'Image generated';
+                        
+                        if (response.data.image_status === 'success' || response.data.image_status === 'pixabay_success') {
+                            statusHtml = '<span style="color: green; font-weight: 600;">✅ Success: </span>' + imageMessage;
+                        } else if (response.data.image_status === 'placeholder_fallback') {
+                            statusHtml = '<span style="color: #ff9900; font-weight: 600;">⚠️ Placeholder: </span>' + imageMessage;
+                        } else {
+                            statusHtml = '<span style="color: red; font-weight: 600;">❌ Error: </span>' + imageMessage;
+                        }
+                        
+                        // Add image ID to status
+                        if (response.data.image_id) {
+                            statusHtml += ' <span style="color: #666;">(ID: ' + response.data.image_id + ')</span>';
+                        }
+                        
+                        // Add featured image status
+                        if (response.data.featured_set) {
+                            if (response.data.featured_set === 'yes') {
+                                statusHtml += ' <span style="color: green;">(Featured ✓)</span>';
+                                refreshFeaturedImageUI(response.data.image_id, response.data.image_url);
+                            } else if (response.data.featured_set === 'no') {
+                                statusHtml += ' <span style="color: orange;">(Featured ✗)</span>';
+                            }
+                        }
+                        
+                        elements.imageStatus.html(statusHtml);
+                    } else {
+                        elements.imagePreviewWrap.hide();
+                    }
+                    
                 } else {
-                    elements.imagePreviewWrap.hide();
+                    const msg = response?.data?.message || response?.message || 'Unknown error occurred.';
+                    elements.errorMessage.text('❌ ' + msg).show();
+                }
+            })
+            .catch(function (errorData) {
+                console.error("❌ AJAX final error:", errorData);
+                elements.spinner.hide();
+                elements.generateBtn.prop('disabled', false).text('Generate Content');
+                
+                let errorMsg = '❌ ';
+                if (errorData.status === 'timeout') {
+                    errorMsg += 'Request timeout. Please try again.';
+                } else if (errorData.errorMessage) {
+                    errorMsg += errorData.errorMessage;
+                    if (shouldRetry(errorData.errorMessage)) {
+                        errorMsg += '<br><br>💡 <strong>Tip:</strong> The AI service is currently busy. Please wait a few moments and try again.';
+                    }
+                } else {
+                    errorMsg += 'Error occurred. Please try again.';
                 }
                 
-            } else {
-                const msg = response?.data?.message || response?.message || 'Unknown error occurred.';
-                elements.errorMessage.text(msg).show();
-            }
-        },
-        function (xhr, status, error) {
-            console.error("❌ AJAX error:", status, error, xhr.responseText);
-            elements.spinner.hide();
-            elements.generateBtn.prop('disabled', false);
-            
-            if (status === 'timeout') {
-                elements.errorMessage.text('Request timeout. Please try again.').show();
-            } else {
-                elements.errorMessage.text('Error occurred: ' + error).show();
-            }
-        }
-    );
-}, 500);
-
-// 🔥 Function to refresh WordPress featured image UI
-function refreshFeaturedImageUI(imageId, imageUrl) {
-    console.log("🔄 Attempting to refresh featured image UI for ID:", imageId);
-    
-    // Method 1: Use WordPress REST API if available
-    if (typeof wp !== 'undefined' && wp.data && wp.data.dispatch) {
-        try {
-            // Update the post's featured image in WordPress store
-            wp.data.dispatch('core/editor').editPost({
-                featured_media: imageId
+                elements.errorMessage.html(errorMsg).show();
             });
-            
-            console.log("✅ Updated featured image via WordPress data store");
-            
-            // Force a UI refresh
-            setTimeout(() => {
-                if (wp.data && wp.data.dispatch && wp.data.dispatch('core/editor').refreshPost) {
-                    wp.data.dispatch('core/editor').refreshPost();
-                    console.log("✅ Refreshed post data");
-                }
-            }, 1000);
-            
-        } catch (error) {
-            console.log("⚠️ Could not update via WordPress store:", error);
-        }
-    }
-    
-    // Method 2: Simulate a click on the featured image to refresh it
-    setTimeout(() => {
-        const featuredImageContainer = document.querySelector('.editor-post-featured-image');
-        if (featuredImageContainer) {
-            console.log("🔄 Found featured image container, attempting refresh...");
-            
-            // Method 2a: Update the image src directly
-            const existingImage = featuredImageContainer.querySelector('img');
-            if (existingImage && imageUrl) {
-                existingImage.src = imageUrl;
-                console.log("✅ Updated image src directly");
-            }
-            
-            // Method 2b: Trigger a custom event
-            const event = new CustomEvent('aicw-featured-image-updated', {
-                detail: { imageId: imageId, imageUrl: imageUrl }
-            });
-            document.dispatchEvent(event);
-        }
     }, 500);
-    
-    // Method 3: Show notification to refresh page
-    setTimeout(() => {
-        if (!document.querySelector('.aicw-refresh-notice')) {
-            const notice = document.createElement('div');
-            notice.className = 'notice notice-info aicw-refresh-notice is-dismissible';
-            notice.style.cssText = 'margin: 10px 0; padding: 10px; background: #f0f6fc; border-left: 4px solid #72aee6;';
-            notice.innerHTML = `
-                <p><strong>Featured Image Updated!</strong> The image has been set as featured. If it doesn't appear, please refresh the page or click on the featured image area.</p>
-                <button type="button" class="notice-dismiss" onclick="this.parentElement.remove()">
-                    <span class="screen-reader-text">Dismiss this notice.</span>
-                </button>
-            `;
-            
-            const adminNotices = document.querySelector('.wrap h1').parentNode;
-            if (adminNotices) {
-                adminNotices.insertBefore(notice, adminNotices.firstChild);
+
+    // 🔥 Function to refresh WordPress featured image UI
+    function refreshFeaturedImageUI(imageId, imageUrl) {
+        console.log("🔄 Attempting to refresh featured image UI for ID:", imageId);
+        
+        // Method 1: Use WordPress REST API if available
+        if (typeof wp !== 'undefined' && wp.data && wp.data.dispatch) {
+            try {
+                // Update the post's featured image in WordPress store
+                wp.data.dispatch('core/editor').editPost({
+                    featured_media: imageId
+                });
+                
+                console.log("✅ Updated featured image via WordPress data store");
+                
+                // Force a UI refresh
+                setTimeout(() => {
+                    if (wp.data && wp.data.dispatch && wp.data.dispatch('core/editor').refreshPost) {
+                        wp.data.dispatch('core/editor').refreshPost();
+                        console.log("✅ Refreshed post data");
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                console.log("⚠️ Could not update via WordPress store:", error);
             }
         }
-    }, 1000);
-}
+        
+        // Method 2: Simulate a click on the featured image to refresh it
+        setTimeout(() => {
+            const featuredImageContainer = document.querySelector('.editor-post-featured-image');
+            if (featuredImageContainer) {
+                console.log("🔄 Found featured image container, attempting refresh...");
+                
+                // Method 2a: Update the image src directly
+                const existingImage = featuredImageContainer.querySelector('img');
+                if (existingImage && imageUrl) {
+                    existingImage.src = imageUrl;
+                    console.log("✅ Updated image src directly");
+                }
+                
+                // Method 2b: Trigger a custom event
+                const event = new CustomEvent('aicw-featured-image-updated', {
+                    detail: { imageId: imageId, imageUrl: imageUrl }
+                });
+                document.dispatchEvent(event);
+            }
+        }, 500);
+        
+        // Method 3: Show notification to refresh page
+        setTimeout(() => {
+            if (!document.querySelector('.aicw-refresh-notice')) {
+                const notice = document.createElement('div');
+                notice.className = 'notice notice-info aicw-refresh-notice is-dismissible';
+                notice.style.cssText = 'margin: 10px 0; padding: 10px; background: #f0f6fc; border-left: 4px solid #72aee6;';
+                notice.innerHTML = `
+                    <p><strong>Featured Image Updated!</strong> The image has been set as featured. If it doesn't appear, please refresh the page or click on the featured image area.</p>
+                    <button type="button" class="notice-dismiss" onclick="this.parentElement.remove()">
+                        <span class="screen-reader-text">Dismiss this notice.</span>
+                    </button>
+                `;
+                
+                const adminNotices = document.querySelector('.wrap h1')?.parentNode;
+                if (adminNotices) {
+                    adminNotices.insertBefore(notice, adminNotices.firstChild);
+                }
+            }
+        }, 1000);
+    }
 
     // Copy result button
     elements.copyBtn.on('click', function () {

@@ -65,36 +65,45 @@ jQuery(document).ready(function($) {
         });
     });
     
-    // API Key Validation
-    $('.aicw-validate-key').on('click', function() {
+
+    // Validate API Key
+    $('.aicw-validate-key').off('click').on('click', function(e) {
+        e.preventDefault();
+
         var $button = $(this);
         var $input = $('#aicw_gemini_api_key');
         var apiKey = $input.val().trim();
-        
+
         if (!apiKey) {
             alert('Please enter an API key for validation.');
             return;
         }
-        
+
         $button.prop('disabled', true).text('Validating...');
         $('#aicw_validation_results').html('<div class="notice notice-info"><p>Validating API key...</p></div>');
-        
+
         $.ajax({
             url: aicwAjax.ajax_url,
             type: 'POST',
+            dataType: 'json',
             data: {
                 action: 'aicw_validate_api_key',
                 nonce: aicwAjax.validate_nonce,
                 api_key: apiKey
             },
             success: function(response) {
+                console.log(response); // Debug
+
+                var message = response.data && response.data.message ? response.data.message : 'No message returned';
+
                 if (response.success) {
-                    $('#aicw_validation_results').html('<div class="notice notice-success"><p>✅ ' + response.data.message + '</p></div>');
+                    $('#aicw_validation_results').html('<div class="notice notice-success"><p>✅ ' + message + '</p></div>');
                 } else {
-                    $('#aicw_validation_results').html('<div class="notice notice-error"><p>❌ ' + response.data.message + '</p></div>');
+                    $('#aicw_validation_results').html('<div class="notice notice-error"><p>❌ ' + message + '</p></div>');
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                console.error(xhr, status, error);
                 $('#aicw_validation_results').html('<div class="notice notice-error"><p>❌ Validation request failed. Please try again.</p></div>');
             },
             complete: function() {
@@ -102,14 +111,16 @@ jQuery(document).ready(function($) {
             }
         });
     });
-    
+
     // Show/hide API key
-    $('#aicw_gemini_api_key').after('<button type="button" class="button button-small aicw-password-toggle" style="margin-left: 5px;">Show</button>');
-    
-    $('.aicw-password-toggle').on('click', function() {
+    if (!$('#aicw_gemini_api_key').next().hasClass('aicw-password-toggle')) {
+        $('#aicw_gemini_api_key').after('<button type="button" class="button button-small aicw-password-toggle" style="margin-left: 5px;">Show</button>');
+    }
+
+    $(document).off('click', '.aicw-password-toggle').on('click', '.aicw-password-toggle', function() {
         var $input = $('#aicw_gemini_api_key');
         var $button = $(this);
-        
+
         if ($input.attr('type') === 'password') {
             $input.attr('type', 'text');
             $button.text('Hide');

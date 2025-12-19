@@ -2,6 +2,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
 class AICW_Ajax_Handlers {
     public static function init() {
         add_action('wp_ajax_aicw_generate_content',        [__CLASS__, 'generate']);
@@ -154,23 +155,37 @@ public static function generate() {
         ];
         return $map[$code] ?? ucfirst($code);
     }
+public static function validate() {
 
-    public static function validate() {
-        check_ajax_referer('aicw_validate_nonce', 'nonce');
+    check_ajax_referer('aicw_validate_nonce', 'nonce');
 
-        while (ob_get_level()) {
-            ob_end_clean();
-        }
-
-        $key = sanitize_text_field($_POST['api_key'] ?? '');
-
-        if (empty($key)) {
-            wp_send_json_error(['message' => __('Please enter an API key.', 'ai-content-writer')]);
-        }
-
-        $validation_result = aicw_validate_gemini_key($key);
-        wp_send_json($validation_result);
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error([
+            'message' => __('Permission denied.', 'ai-content-writer')
+        ]);
     }
+
+    $key = sanitize_text_field($_POST['api_key'] ?? '');
+
+    if (empty($key)) {
+        wp_send_json_error([
+            'message' => __('Please enter an API key.', 'ai-content-writer')
+        ]);
+    }
+
+    $result = aicw_validate_gemini_key($key);
+
+    if (!empty($result['success'])) {
+        wp_send_json_success([
+            'message' => $result['message']
+        ]);
+    }
+
+    wp_send_json_error([
+        'message' => $result['message']
+    ]);
+}
+
 
     public static function generate_image() {
         check_ajax_referer('aicw_generate_nonce', 'nonce');

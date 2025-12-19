@@ -15,49 +15,56 @@ function aicw_get_decrypted_key($option) {
     $enc = get_option($option, '');
     return $enc ? base64_decode($enc) : '';
 }
-
 /**
- * ✅ Validate Gemini API key
+ * ✅ Validate Gemini API key (NO quota usage)
  */
 function aicw_validate_gemini_key($key) {
-    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . rawurlencode($key);
 
-    $body = wp_json_encode([
-        'contents' => [
-            ['parts' => [['text' => 'OK']]]
-        ]
-    ]);
+    $url = 'https://generativelanguage.googleapis.com/v1beta/models?key=' . rawurlencode($key);
 
-    $resp = wp_remote_post($url, [
-        'headers'    => [
-            'Content-Type' => 'application/json',
-            'Accept'       => 'application/json',
-        ],
-        'body'       => $body,
-        'timeout'    => 60,
-        'sslverify'  => false,
+    $resp = wp_remote_get($url, [
+        'timeout'   => 20,
+        'sslverify' => false,
     ]);
 
     if (is_wp_error($resp)) {
-        return ['success' => false, 'message' => __('Connection error: ', 'ai-content-writer') . $resp->get_error_message()];
+        return [
+            'success' => false,
+            'message' => 'Connection error: ' . $resp->get_error_message()
+        ];
     }
 
     $code = wp_remote_retrieve_response_code($resp);
     $raw  = wp_remote_retrieve_body($resp);
     $data = json_decode($raw, true);
 
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        @file_put_contents(AICW_PLUGIN_DIR . 'includes/debug-gemini-validate.log', $raw);
-        return ['success' => false, 'message' => __('Invalid response from Gemini (not JSON).', 'ai-content-writer')];
+    if ($code === 200 && !empty($data['models'])) {
+        return [
+            'success' => true,
+            'message' => 'API key is valid and active.'
+        ];
     }
 
-    if ($code === 200) {
-        return ['success' => true, 'message' => __('✅ Gemini API key is valid!', 'ai-content-writer')];
+    if ($code === 401 || $code === 403) {
+        return [
+            'success' => false,
+            'message' => 'Invalid API key or permission denied.'
+        ];
     }
 
-    $msg = $data['error']['message'] ?? __('Invalid key or request', 'ai-content-writer');
-    return ['success' => false, 'message' => '❌ ' . $msg];
+    if (isset($data['error']['message'])) {
+        return [
+            'success' => false,
+            'message' => $data['error']['message']
+        ];
+    }
+
+    return [
+        'success' => false,
+        'message' => 'Unable to validate API key.'
+    ];
 }
+
 
 /**
  * ✅ Generate content via Gemini

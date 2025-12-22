@@ -209,22 +209,36 @@ jQuery(document).ready(function($) {
     }
 
     // Helper function to set the Featured Image
-    function setFeaturedImage(attachmentId) {
-        if (!attachmentId || attachmentId === 0) return;
-        
-        if (typeof wp !== 'undefined' && wp.data && wp.data.dispatch('core/editor')) {
-            // Gutenberg Featured Image Setter
-            wp.data.dispatch('core/editor').setFeaturedImage(attachmentId);
-        } else {
-            // Classic Editor/Fallback Featured Image Setter (Requires hidden input updates)
-            $('#_thumbnail_id').val(attachmentId);
-            // Optionally, trigger a refresh if the metabox is active
-            if (typeof tb_show === 'function') {
-                $('.inside', '#postimagediv').html('<p>' + aicwAjax.message_image_set + '</p>'); // Simplified feedback
-            }
-        }
-    }
+function setFeaturedImage(attachmentId) {
+    if (!attachmentId || attachmentId === 0) return;
 
+    // Gutenberg Editor
+    if (
+        typeof wp !== 'undefined' &&
+        wp.data &&
+        wp.data.dispatch &&
+        wp.data.select('core/editor')
+    ) {
+        wp.data.dispatch('core/editor').editPost({
+            featured_media: attachmentId
+        });
+
+        // console.log('AICW: Featured image set in Gutenberg:', attachmentId);
+    }
+    // Classic Editor fallback
+    else {
+        $('#_thumbnail_id').val(attachmentId);
+
+        // Visual feedback for Classic Editor
+        if ($('#postimagediv').length) {
+            $('#postimagediv .inside').prepend(
+                '<div class="notice notice-success inline"><p>Featured image set successfully.</p></div>'
+            );
+        }
+
+        // console.log('AICW: Featured image set in Classic Editor:', attachmentId);
+    }
+}
 
     // Insert Content into Editor Logic
     function insertContentIntoEditor(content) {

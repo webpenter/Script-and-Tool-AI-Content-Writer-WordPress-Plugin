@@ -54,8 +54,8 @@ class WebPenter_ABA_Settings
   public static function add_admin_menu()
   {
     add_menu_page(
-      __('AI Blog Automator', 'ai-blog-automator'),
-      __('AI Blog Automator', 'ai-blog-automator'),
+      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-automator'),
+      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-automator'),
       'manage_options',
       'ai-blog-automator-settings',
       array(__CLASS__, 'render_settings_page'),

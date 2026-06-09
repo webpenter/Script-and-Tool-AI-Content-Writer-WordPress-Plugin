@@ -14,7 +14,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
   <div class="aba-header-banner">
     <div class="aba-header-content">
       <div class="aba-header-title">
-        <h1>✨ AI Blog Automator</h1>
+        <h1>✨ Script-and-Tool-AI-Content-Writer-WordPress-Plugin</h1>
         <span class="aba-badge">v99.9.9</span>
       </div>
       <p class="aba-header-subtitle">Created by <strong>Fayyaz Ahmad</strong> @ <strong>WebPenter</strong></p>

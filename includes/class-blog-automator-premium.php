@@ -210,7 +210,7 @@ class WebPenter_ABA_Premium
         <span class="upgrade-modal-close">&times;</span>
         <div class="upgrade-modal-header">
           <span class="dashicons dashicons-unlock"></span>
-          <h2><?php esc_html_e('Upgrade to AI Blog Automator Pro', 'ai-blog-automator'); ?></h2>
+          <h2><?php esc_html_e('Upgrade to Script-and-Tool-AI-Content-Writer-WordPress-Plugin Pro', 'ai-blog-automator'); ?></h2>
         </div>
 
         <?php if ($feature_info): ?>

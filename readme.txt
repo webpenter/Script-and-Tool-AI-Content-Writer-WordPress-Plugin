@@ -1,6 +1,6 @@
-=== AI Blog Automator ===
-Contributors: bluteem
-Donate link: https://bluteem.com/donate
+=== Script-and-Tool-AI-Content-Writer-WordPress-Plugin ===
+Contributors: webpenter
+Donate link: https://webpenter.com/
 Tags: ai, blog, automation, openai, content
 Requires at least: 5.8
 Tested up to: 7.0
@@ -13,7 +13,7 @@ Automatically generate and publish SEO-optimized blog posts using AI with custom
 
 == Description ==
 
-AI Blog Automator is a powerful WordPress plugin that leverages artificial intelligence to automatically create high-quality, SEO-optimized blog posts for your website. Perfect for content marketers, bloggers, and website owners who want to maintain a consistent posting schedule.
+Script-and-Tool-AI-Content-Writer-WordPress-Plugin is a powerful WordPress plugin that leverages artificial intelligence to automatically create high-quality, SEO-optimized blog posts for your website. Perfect for content marketers, bloggers, and website owners who want to maintain a consistent posting schedule.
 
 = Key Features (Free Version) =
 
@@ -42,7 +42,7 @@ Upgrade to Pro for advanced capabilities:
 * **SEO Optimization** - Auto-generate meta descriptions (Yoast, Rank Math, AIOSEO compatible)
 * **Bulk Generation** - Create multiple posts at once from keyword list
 
-[Learn more about Pro features →](https://bluteem.com/ai-blog-automator/)
+[Learn more about Pro features →](https://webpenter.com/script-and-tool-ai-content-writer-wordpress-plugin/)
 
 = How It Works =
 
@@ -180,7 +180,7 @@ Full documentation is available in the plugin's README.md file, including:
 
 1. Log in to your WordPress admin panel
 2. Navigate to Plugins → Add New
-3. Search for "AI Blog Automator"
+3. Search for "Script-and-Tool-AI-Content-Writer-WordPress-Plugin"
 4. Click "Install Now" and then "Activate"
 
 = Manual Installation =
@@ -193,7 +193,7 @@ Full documentation is available in the plugin's README.md file, including:
 
 = Configuration =
 
-1. Go to Settings → AI Blog Automator
+1. Go to Settings → Script-and-Tool-AI-Content-Writer-WordPress-Plugin
 2. Enter your API key (Groq API key for free version)
 4. Configure your content preferences:
    * Add keywords/topics (comma-separated)

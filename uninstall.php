@@ -103,5 +103,5 @@ webpenter_aba_uninstall_cleanup();
 // Log uninstallation (if debug mode is enabled)
 if (defined('WP_DEBUG') && WP_DEBUG) {
   // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-  error_log('AI Blog Automator: Plugin uninstalled and all data cleaned up');
+  error_log('Script-and-Tool-AI-Content-Writer-WordPress-Plugin: Plugin uninstalled and all data cleaned up');
 }

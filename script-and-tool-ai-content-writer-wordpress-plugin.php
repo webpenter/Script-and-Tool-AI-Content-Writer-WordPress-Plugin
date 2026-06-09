@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: AI Blog Automator
+ * Plugin Name: Script-and-Tool-AI-Content-Writer-WordPress-Plugin
  * Plugin URI: https://webpenter.com/
  * Description: Automatically generates and publishes SEO-optimized blog posts using Google Gemini API & Pixabay API. Custom built by Fayyaz Ahmad.
  * Version: 99.9.9
@@ -218,7 +218,7 @@ function webpenter_aba_activate()
   WebPenter_ABA_Cron::schedule_event();
 
   if (defined('WP_DEBUG') && WP_DEBUG) {
-    error_log('AI Blog Automator: Custom version activated.');
+    error_log('Script-and-Tool-AI-Content-Writer-WordPress-Plugin: Custom version activated.');
   }
 
   // Register post type and flush rewrite rules immediately so 404 errors don't occur
@@ -235,7 +235,7 @@ function webpenter_aba_deactivate()
 {
   WebPenter_ABA_Cron::clear_scheduled_event();
   if (defined('WP_DEBUG') && WP_DEBUG) {
-    error_log('AI Blog Automator: Plugin deactivated.');
+    error_log('Script-and-Tool-AI-Content-Writer-WordPress-Plugin: Plugin deactivated.');
   }
 }
 register_deactivation_hook(__FILE__, 'webpenter_aba_deactivate');

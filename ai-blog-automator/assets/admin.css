@@ -1,0 +1,357 @@
+/**
+ * Admin Styles for AI Blog Automator
+ *
+ * @package AI_Blog_Automator
+ */
+
+/* Main container */
+.ai-blog-automator-settings {
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+/* Card styling */
+.ai-blog-automator-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.ai-blog-automator-card h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 18px;
+}
+
+.ai-blog-automator-card h3 {
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+/* Form fields */
+.ai-blog-automator-field {
+    margin-bottom: 20px;
+}
+
+.ai-blog-automator-field:last-child {
+    margin-bottom: 0;
+}
+
+.ai-blog-automator-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.ai-blog-automator-field input[type="text"],
+.ai-blog-automator-field input[type="password"],
+.ai-blog-automator-field select,
+.ai-blog-automator-field textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 8px 12px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.ai-blog-automator-field textarea {
+    min-height: 100px;
+    font-family: Consolas, Monaco, monospace;
+    line-height: 1.6;
+}
+
+.ai-blog-automator-field .description {
+    display: block;
+    margin-top: 8px;
+    color: #646970;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Stats display */
+.ai-blog-automator-stats {
+    margin: 15px 0;
+}
+
+.ai-blog-automator-stats p {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.ai-blog-automator-stats strong {
+    display: inline-block;
+    min-width: 180px;
+    color: #1d2327;
+}
+
+/* Danger/Error styling */
+.ai-blog-automator-danger {
+    background: #fcf3f3;
+    border: 1px solid #dc3232;
+    border-left: 4px solid #dc3232;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.ai-blog-automator-danger h3 {
+    margin-top: 0;
+    color: #dc3232;
+    font-size: 16px;
+}
+
+.ai-blog-automator-danger p {
+    margin: 8px 0;
+    font-size: 13px;
+}
+
+/* Premium tab */
+.ai-blog-automator-premium-tab {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.ai-blog-automator-premium-tab h2 {
+    color: #fff;
+    margin-top: 0;
+    font-size: 24px;
+    border: none;
+}
+
+.ai-blog-automator-premium-tab ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.ai-blog-automator-premium-tab li {
+    padding: 12px 15px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.ai-blog-automator-premium-tab li:before {
+    content: "✓";
+    margin-right: 10px;
+    font-weight: bold;
+    color: #46b450;
+}
+
+.ai-blog-automator-premium-tab .button {
+    background: #fff;
+    color: #667eea;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    margin-top: 15px;
+}
+
+.ai-blog-automator-premium-tab .button:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Inline upgrade notice */
+.ai-blog-automator-upgrade-inline {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.ai-blog-automator-upgrade-inline:hover {
+    color: #fff;
+    opacity: 0.9;
+}
+
+/* Disabled fields styling */
+select[disabled],
+input[disabled] {
+    background: #f6f7f7 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+/* Responsive design */
+@media (max-width: 782px) {
+    .ai-blog-automator-card {
+        padding: 15px;
+    }
+    
+    .ai-blog-automator-field input[type="text"],
+    .ai-blog-automator-field input[type="password"],
+    .ai-blog-automator-field select,
+    .ai-blog-automator-field textarea {
+        max-width: 100%;
+    }
+    
+    .ai-blog-automator-premium-tab ul {
+        grid-template-columns: 1fr;
+    }
+    
+    .ai-blog-automator-stats strong {
+        display: block;
+        margin-bottom: 5px;
+    }
+}
+
+/* Notice improvements */
+.notice.ai-blog-automator-notice {
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.notice.ai-blog-automator-notice h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.notice.ai-blog-automator-notice p {
+    margin: 8px 0;
+}
+
+/* Button improvements */
+.ai-blog-automator-card form .button {
+    margin-top: 10px;
+}
+
+/* Pre/code blocks */
+.ai-blog-automator-card pre {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Details/Summary styling */
+.ai-blog-automator-card details {
+    margin-top: 15px;
+}
+
+.ai-blog-automator-card summary {
+    cursor: pointer;
+    color: #2271b1;
+    font-weight: 600;
+    padding: 8px 0;
+}
+
+.ai-blog-automator-card summary:hover {
+    color: #135e96;
+}
+
+/* Help section styling */
+.ai-blog-automator-card ol,
+.ai-blog-automator-card ul {
+    margin-left: 20px;
+    line-height: 1.8;
+}
+
+.ai-blog-automator-card li {
+    margin-bottom: 8px;
+}
+
+/* Manual generate loading state */
+.bluteem-aba-generate-form .submit {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bluteem-aba-generate-spinner {
+    float: none;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.bluteem-aba-is-generating {
+    opacity: 0.85;
+    cursor: wait;
+}
+
+/* Error logs page */
+.ai-blog-automator-logs-card .description {
+    margin-top: 0;
+}
+
+.ai-blog-automator-logs-list {
+    margin: 15px 0;
+}
+
+.ai-blog-automator-log-entry {
+    background: #fcf0f1;
+    border-left: 4px solid #d63638;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+}
+
+.ai-blog-automator-log-entry:last-child {
+    margin-bottom: 0;
+}
+
+.ai-blog-automator-log-time {
+    margin: 0 0 6px;
+}
+
+.ai-blog-automator-log-message {
+    margin: 0;
+    word-break: break-word;
+}
+
+.ai-blog-automator-logs-actions {
+    margin-top: 15px;
+}
+
+.ai-blog-automator-logs-actions .button {
+    margin: 0;
+    float: none;
+}
+
+/* External services card (no .notice class — WordPress relocates .notice on load) */
+.ai-blog-automator-external-services h4 {
+    margin: 16px 0 6px;
+    font-size: 14px;
+}
+
+.ai-blog-automator-external-services p {
+    margin: 8px 0;
+}
+
+.ai-blog-automator-external-services ul {
+    margin: 8px 0 8px 20px;
+}
+
+/* Submenu icon (Logs) */
+#adminmenu .bluteem-aba-menu-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+    margin-right: 2px;
+}
+

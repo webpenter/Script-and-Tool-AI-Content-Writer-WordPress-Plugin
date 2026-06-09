@@ -23,20 +23,20 @@ if (!current_user_can('activate_plugins')) {
 /**
  * Delete plugin options
  */
-function bluteem_aba_uninstall_cleanup()
+function webpenter_aba_uninstall_cleanup()
 {
   // Delete main plugin settings
-  delete_option('bluteem_aba_settings');
+  delete_option('webpenter_aba_settings');
 
   // Delete error logs
-  delete_option('bluteem_aba_errors');
-  delete_option('bluteem_aba_errors_notice_id');
+  delete_option('webpenter_aba_errors');
+  delete_option('webpenter_aba_errors_notice_id');
 
   // Delete post counter
-  delete_option('bluteem_aba_posts_count');
+  delete_option('webpenter_aba_posts_count');
 
   // Delete keyword tracking
-  delete_option('bluteem_aba_recent_keywords');
+  delete_option('webpenter_aba_recent_keywords');
 
   // For multisite installations, delete from all sites
   if (is_multisite()) {
@@ -49,23 +49,23 @@ function bluteem_aba_uninstall_cleanup()
       switch_to_blog($blog_id);
 
       // Delete options for this site
-      delete_option('bluteem_aba_settings');
-      delete_option('bluteem_aba_errors');
+      delete_option('webpenter_aba_settings');
+      delete_option('webpenter_aba_errors');
 
       // Delete post meta for generated posts
-      bluteem_aba_delete_post_meta();
+      webpenter_aba_delete_post_meta();
     }
 
     switch_to_blog($original_blog_id);
   } else {
     // Single site - delete post meta
-    bluteem_aba_delete_post_meta();
+    webpenter_aba_delete_post_meta();
   }
 
   // Clear any scheduled cron events
-  $timestamp = wp_next_scheduled('bluteem_aba_generate_post');
+  $timestamp = wp_next_scheduled('webpenter_aba_generate_post');
   if ($timestamp) {
-    wp_unschedule_event($timestamp, 'bluteem_aba_generate_post');
+    wp_unschedule_event($timestamp, 'webpenter_aba_generate_post');
   }
 }
 
@@ -75,7 +75,7 @@ function bluteem_aba_uninstall_cleanup()
  * Note: This only removes meta tags that identify posts as AI-generated.
  * The actual posts remain in the database.
  */
-function bluteem_aba_delete_post_meta()
+function webpenter_aba_delete_post_meta()
 {
   global $wpdb;
 
@@ -84,7 +84,7 @@ function bluteem_aba_delete_post_meta()
   $wpdb->delete(
     $wpdb->postmeta,
     // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-    array('meta_key' => '_bluteem_aba_generated'),
+    array('meta_key' => '_webpenter_aba_generated'),
     array('%s')
   );
 
@@ -92,13 +92,13 @@ function bluteem_aba_delete_post_meta()
   $wpdb->delete(
     $wpdb->postmeta,
     // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-    array('meta_key' => '_bluteem_aba_timestamp'),
+    array('meta_key' => '_webpenter_aba_timestamp'),
     array('%s')
   );
 }
 
 // Run the cleanup
-bluteem_aba_uninstall_cleanup();
+webpenter_aba_uninstall_cleanup();
 
 // Log uninstallation (if debug mode is enabled)
 if (defined('WP_DEBUG') && WP_DEBUG) {

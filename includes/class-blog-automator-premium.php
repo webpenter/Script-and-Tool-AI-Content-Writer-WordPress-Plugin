@@ -14,7 +14,7 @@ defined('ABSPATH') || exit;
 /**
  * Premium Features Class
  */
-class Bluteem_ABA_Premium
+class WebPenter_ABA_Premium
 {
 
   /**
@@ -24,8 +24,8 @@ class Bluteem_ABA_Premium
    */
   public static function is_active()
   {
-    return class_exists('Bluteem_ABA_Pro') &&
-      apply_filters('bluteem_aba_pro_is_active', false);
+    return class_exists('WebPenter_ABA_Pro') &&
+      apply_filters('webpenter_aba_pro_is_active', false);
   }
 
   /**
@@ -40,7 +40,7 @@ class Bluteem_ABA_Premium
       return false;
     }
 
-    $available_features = apply_filters('bluteem_aba_pro_features', array());
+    $available_features = apply_filters('webpenter_aba_pro_features', array());
     return in_array($feature, $available_features, true);
   }
 
@@ -52,7 +52,7 @@ class Bluteem_ABA_Premium
    */
   public static function get_upgrade_url($source = 'general')
   {
-    $url = 'https://bluteem.com/ai-blog-automator/';
+    $url = 'https://webpenter.com/ai-blog-automator/';
 
     // Add UTM parameters for tracking
     $url = add_query_arg(array(
@@ -61,7 +61,7 @@ class Bluteem_ABA_Premium
       'utm_campaign' => 'upgrade'
     ), $url);
 
-    return apply_filters('bluteem_aba_upgrade_url', $url, $source);
+    return apply_filters('webpenter_aba_upgrade_url', $url, $source);
   }
 
   /**
@@ -257,7 +257,7 @@ class Bluteem_ABA_Premium
       return;
     }
 
-    add_action('bluteem_aba_settings_tabs', array(__CLASS__, 'render_premium_tab'));
+    add_action('webpenter_aba_settings_tabs', array(__CLASS__, 'render_premium_tab'));
   }
 
   /**

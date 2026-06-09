@@ -72,15 +72,6 @@ class WebPenter_ABA_Settings
       $logs_menu_title .= sprintf(' <span class="awaiting-mod"><span class="pending-count">%d</span></span>', $error_count);
     }
     
-    // Add submenu to our new settings page
-    add_submenu_page(
-      'ai-blog-automator-settings',
-      __('Settings', 'ai-blog-automator'),
-      __('Settings', 'ai-blog-automator'),
-      'manage_options',
-      'ai-blog-automator-settings'
-    );
-
     add_submenu_page(
       'ai-blog-automator-settings',
       __('Logs & Debug', 'ai-blog-automator'),
@@ -123,7 +114,9 @@ class WebPenter_ABA_Settings
   public static function get_settings()
   {
     $defaults = array(
+      'ai_provider' => 'gemini',
       'gemini_api_key' => '',
+      'groq_api_key' => '',
       'pixabay_api_key' => '',
       'automation_status' => 'disabled',
       'post_type' => 'blog',
@@ -153,7 +146,9 @@ class WebPenter_ABA_Settings
     $sanitized = array();
     $current = self::get_settings();
     
+    $sanitized['ai_provider'] = isset($input['ai_provider']) && $input['ai_provider'] === 'groq' ? 'groq' : 'gemini';
     $sanitized['gemini_api_key'] = isset($input['gemini_api_key']) ? sanitize_text_field($input['gemini_api_key']) : '';
+    $sanitized['groq_api_key'] = isset($input['groq_api_key']) ? sanitize_text_field($input['groq_api_key']) : '';
     $sanitized['pixabay_api_key'] = isset($input['pixabay_api_key']) ? sanitize_text_field($input['pixabay_api_key']) : '';
     $sanitized['automation_status'] = isset($input['automation_status']) && $input['automation_status'] === 'enabled' ? 'enabled' : 'disabled';
     $sanitized['post_type'] = isset($input['post_type']) ? sanitize_text_field($input['post_type']) : 'blog';

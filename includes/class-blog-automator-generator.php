@@ -39,9 +39,16 @@ class WebPenter_ABA_Generator
   {
     $settings = WebPenter_ABA_Settings::get_settings();
 
-    // Check API Keys
-    if (empty($settings['gemini_api_key'])) {
-      return new WP_Error('missing_api', 'Gemini API Key is missing.');
+    // Check API Keys based on provider
+    $provider = isset($settings['ai_provider']) ? $settings['ai_provider'] : 'gemini';
+    if ($provider === 'groq') {
+      if (empty($settings['groq_api_key'])) {
+        return new WP_Error('missing_api', 'Groq API Key is missing. Get one free at https://console.groq.com');
+      }
+    } else {
+      if (empty($settings['gemini_api_key'])) {
+        return new WP_Error('missing_api', 'Gemini API Key is missing.');
+      }
     }
 
     // Pick a topic
@@ -65,17 +72,21 @@ class WebPenter_ABA_Generator
     $prompt .= "At the very end of the article, add a line containing 3 to 5 comma-separated tags for this post, formatted exactly like this: [TAGS: tag1, tag2, tag3]\n";
     $prompt .= "On the line below the tags, provide a few simple English keywords (e.g. 'laptop developer coding' or 'office programming code') that would be perfect to search for a high-quality featured stock photo for this specific article on Pixabay, formatted exactly like this: [IMAGE_KEYWORDS: keywords here]";
 
-    // 1. Call Gemini
-    $gemini_content = self::call_gemini_api($prompt, $settings['gemini_api_key']);
-    if (is_wp_error($gemini_content)) return $gemini_content;
+    // 1. Call AI API based on provider
+    if ($provider === 'groq') {
+      $ai_content = self::call_groq_api($prompt, $settings['groq_api_key']);
+    } else {
+      $ai_content = self::call_gemini_api($prompt, $settings['gemini_api_key']);
+    }
+    if (is_wp_error($ai_content)) return $ai_content;
 
     // Parse Title and Content
     $title = '';
-    $content = $gemini_content;
+    $content = $ai_content;
     
-    if (preg_match('/<h1[^>]*>(.*?)<\/h1>/is', $gemini_content, $matches)) {
+    if (preg_match('/<h1[^>]*>(.*?)<\/h1>/is', $ai_content, $matches)) {
         $title = wp_strip_all_tags($matches[1]);
-        $content = preg_replace('/<h1[^>]*>.*?<\/h1>/is', '', $gemini_content, 1);
+        $content = preg_replace('/<h1[^>]*>.*?<\/h1>/is', '', $ai_content, 1);
     } else {
         $title = $topic . ' - ' . date('Y-m-d');
     }
@@ -151,8 +162,7 @@ class WebPenter_ABA_Generator
 
   private static function call_gemini_api($prompt, $api_key)
   {
-    $models = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-pro-latest', 'gemini-3.5-flash'];
-    $last_error = null;
+    $models = array('gemini-2.0-flash');
 
     foreach ($models as $model) {
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent?key=' . $api_key;
@@ -174,7 +184,7 @@ class WebPenter_ABA_Generator
         ));
 
         if (is_wp_error($response)) {
-          return $response; // Network error, return immediately
+          return $response;
         }
 
         $status_code = wp_remote_retrieve_response_code($response);
@@ -189,19 +199,54 @@ class WebPenter_ABA_Generator
         }
 
         $err = isset($data['error']['message']) ? $data['error']['message'] : 'Unknown Gemini error';
-        $last_error = new WP_Error('gemini_error', "HTTP $status_code ($model): $err");
-
-        // If it's 503 (High Demand) or 429 (Rate Limit), try the next model
-        if ($status_code === 503 || $status_code === 429) {
-            sleep(1); // Small delay before trying next model
-            continue;
-        }
-
-        // If it's any other error (like 400 Bad Request or 403 Forbidden), don't retry
-        break;
+        return new WP_Error('gemini_error', "HTTP $status_code ($model): $err");
     }
 
-    return $last_error ?: new WP_Error('gemini_parsing', 'Could not parse Gemini response.');
+    return new WP_Error('gemini_parsing', 'Could not parse Gemini response.');
+  }
+
+  private static function call_groq_api($prompt, $api_key)
+  {
+    $url = 'https://api.groq.com/openai/v1/chat/completions';
+
+    $body = array(
+      'model' => 'llama-3.1-8b-instant',
+      'messages' => array(
+        array(
+          'role' => 'user',
+          'content' => $prompt
+        )
+      ),
+      'temperature' => 0.7,
+      'max_tokens' => 3000
+    );
+
+    $response = wp_remote_post($url, array(
+      'headers' => array(
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Bearer ' . $api_key
+      ),
+      'body'    => wp_json_encode($body),
+      'timeout' => 60
+    ));
+
+    if (is_wp_error($response)) {
+      return $response;
+    }
+
+    $status_code = wp_remote_retrieve_response_code($response);
+    $body_json = wp_remote_retrieve_body($response);
+    $data = json_decode($body_json, true);
+
+    if ($status_code === 200 && isset($data['choices'][0]['message']['content'])) {
+      $text = $data['choices'][0]['message']['content'];
+      $text = preg_replace('/```html\s*/', '', $text);
+      $text = preg_replace('/```\s*$/', '', $text);
+      return $text;
+    }
+
+    $err = isset($data['error']['message']) ? $data['error']['message'] : 'Unknown Groq error';
+    return new WP_Error('groq_error', "HTTP $status_code: $err");
   }
 
   private static function call_pixabay_api($query, $api_key)

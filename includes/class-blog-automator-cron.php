@@ -28,11 +28,6 @@ class WebPenter_ABA_Cron
       'display'  => sprintf(__('Custom (%d seconds)', 'ai-blog-automator'), $custom_seconds)
     );
 
-    $schedules['secondly'] = array(
-      'interval' => 1,
-      'display'  => __('Every Second', 'ai-blog-automator')
-    );
-
     $schedules['minutely'] = array(
       'interval' => 60,
       'display'  => __('Every Minute', 'ai-blog-automator')
@@ -54,8 +49,6 @@ class WebPenter_ABA_Cron
 
     if ($frequency === 'custom') {
         $cron_schedule = 'aba_custom_interval';
-    } elseif ($frequency === 'secondly') {
-        $cron_schedule = 'secondly';
     } elseif ($frequency === 'minutely') {
         $cron_schedule = 'minutely';
     } elseif ($frequency === 'hourly') {

@@ -3,8 +3,8 @@
 /**
  * Plugin Name: Script-and-Tool-AI-Content-Writer-WordPress-Plugin
  * Plugin URI: https://webpenter.com/
- * Description: Automatically generates and publishes SEO-optimized blog posts using Google Gemini API & Pixabay API. Custom built by Fayyaz Ahmad.
- * Version: 99.9.9
+ * Description: Automatically generates and publishes SEO-optimized blog posts using AI (Google Gemini or Groq) & Pixabay API. Custom built by Fayyaz Ahmad.
+ * Version: 1.0.7
  * Author: Fayyaz Ahmad @ WebPenter
  * Author URI: https://webpenter.com/
  * License: GPL v2 or later
@@ -19,7 +19,7 @@
 defined('ABSPATH') || exit;
 
 // Define plugin constants
-define('WEBPENTER_ABA_VERSION', '99.9.9');
+define('WEBPENTER_ABA_VERSION', '1.0.7');
 define('WEBPENTER_ABA_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WEBPENTER_ABA_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WEBPENTER_ABA_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -187,7 +187,9 @@ class WebPenter_ABA_Main
 function webpenter_aba_activate()
 {
   $defaults = array(
+    'ai_provider' => 'gemini',
     'gemini_api_key' => '',
+    'groq_api_key' => '',
     'pixabay_api_key' => '',
     'automation_status' => 'disabled',
     'post_type' => 'blog',

@@ -29,7 +29,7 @@ $error_count = count($recent_errors);
   <?php endif; ?>
 
   <p>
-    <a href="<?php echo esc_url(admin_url('admin.php?page=ai-blog-automator')); ?>" class="button">
+    <a href="<?php echo esc_url(admin_url('admin.php?page=ai-blog-automator-settings')); ?>" class="button">
       <?php esc_html_e('&larr; Back to Settings', 'ai-blog-automator'); ?>
     </a>
   </p>

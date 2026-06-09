@@ -27,4 +27,15 @@ jQuery(document).ready(function($) {
       $(this).text('Show');
     }
   });
+
+  // Provider toggle
+  $('#aba-ai-provider').on('change', function() {
+    if ($(this).val() === 'groq') {
+      $('#aba-gemini-card').hide();
+      $('#aba-groq-card').show();
+    } else {
+      $('#aba-gemini-card').show();
+      $('#aba-groq-card').hide();
+    }
+  });
 });

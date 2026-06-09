@@ -63,9 +63,9 @@ function webpenter_aba_uninstall_cleanup()
   }
 
   // Clear any scheduled cron events
-  $timestamp = wp_next_scheduled('webpenter_aba_generate_post');
+  $timestamp = wp_next_scheduled('webpenter_aba_cron_generate');
   if ($timestamp) {
-    wp_unschedule_event($timestamp, 'webpenter_aba_generate_post');
+    wp_unschedule_event($timestamp, 'webpenter_aba_cron_generate');
   }
 }
 

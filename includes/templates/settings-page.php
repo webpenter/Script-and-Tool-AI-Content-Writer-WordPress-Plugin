@@ -15,7 +15,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
     <div class="aba-header-content">
       <div class="aba-header-title">
         <h1>✨ Script-and-Tool-AI-Content-Writer-WordPress-Plugin</h1>
-        <span class="aba-badge">v99.9.9</span>
+        <span class="aba-badge">v1.0.7</span>
       </div>
       <p class="aba-header-subtitle">Created by <strong>Fayyaz Ahmad</strong> @ <strong>WebPenter</strong></p>
     </div>
@@ -59,6 +59,21 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
       <div id="tab-general" class="aba-tab-content <?php echo $active_tab == 'general' ? 'active' : ''; ?>">
         <div class="aba-card-grid">
           <div class="aba-card">
+            <div class="aba-card-icon">🤖</div>
+            <h3 class="aba-card-title">AI Provider</h3>
+            <p class="aba-desc">Choose which AI service to generate content.</p>
+            <div class="aba-field">
+              <label>Provider</label>
+              <div class="aba-select-wrapper">
+                <select name="webpenter_aba_settings[ai_provider]" id="aba-ai-provider">
+                  <option value="gemini" <?php selected($settings['ai_provider'], 'gemini'); ?>>Google Gemini</option>
+                  <option value="groq" <?php selected($settings['ai_provider'], 'groq'); ?>>Groq (Free - Llama 3)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="aba-card" id="aba-gemini-card">
             <div class="aba-card-icon">🗝️</div>
             <h3 class="aba-card-title">Google Gemini API</h3>
             <p class="aba-desc">Powers the AI content generation engine.</p>
@@ -69,6 +84,20 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
                 <button type="button" class="aba-toggle-password">Show</button>
               </div>
               <p class="aba-help"><a href="https://aistudio.google.com/app/apikey" target="_blank">Get your free key here →</a></p>
+            </div>
+          </div>
+
+          <div class="aba-card" id="aba-groq-card" style="<?php echo $settings['ai_provider'] !== 'groq' ? 'display:none;' : ''; ?>">
+            <div class="aba-card-icon">⚡</div>
+            <h3 class="aba-card-title">Groq API (Free - No Billing Needed)</h3>
+            <p class="aba-desc">Free AI generation using Llama 3 (30 req/min, no credit card).</p>
+            <div class="aba-field">
+              <label>API Key</label>
+              <div class="aba-password-field">
+                <input type="password" name="webpenter_aba_settings[groq_api_key]" value="<?php echo esc_attr($settings['groq_api_key']); ?>" placeholder="Enter Groq API Key...">
+                <button type="button" class="aba-toggle-password">Show</button>
+              </div>
+              <p class="aba-help"><a href="https://console.groq.com" target="_blank">Get your free key here →</a></p>
             </div>
           </div>
 
@@ -164,7 +193,6 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
               <div class="aba-select-wrapper">
                 <select name="webpenter_aba_settings[schedule_frequency]">
                   <option value="custom" <?php selected($settings['schedule_frequency'], 'custom'); ?>>⚙️ Custom Schedule</option>
-                  <option value="secondly" <?php selected($settings['schedule_frequency'], 'secondly'); ?>>Every Second</option>
                   <option value="minutely" <?php selected($settings['schedule_frequency'], 'minutely'); ?>>Every Minute</option>
                   <option value="hourly" <?php selected($settings['schedule_frequency'], 'hourly'); ?>>Hourly</option>
                   <option value="daily" <?php selected($settings['schedule_frequency'], 'daily'); ?>>Daily</option>

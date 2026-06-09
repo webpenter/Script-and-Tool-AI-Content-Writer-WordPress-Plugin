@@ -17,7 +17,7 @@ Script-and-Tool-AI-Content-Writer-WordPress-Plugin is a powerful WordPress plugi
 
 = Key Features (Free Version) =
 
-* **Unlimited Posts with Groq** - Generate as many posts as you want using free Groq AI
+* **Unlimited Posts with Gemini** - Generate as many posts as you want using free Google Gemini AI
 * **Automated Content Generation** - Create full blog posts automatically using AI
 * **Daily Scheduling** - Automatic daily post generation with WordPress Cron
 * **Customizable Content** - Configure topics and keywords for diverse content
@@ -27,13 +27,13 @@ Script-and-Tool-AI-Content-Writer-WordPress-Plugin is a powerful WordPress plugi
 * **Manual Generation** - Create posts on-demand with a single click
 * **Error Logging** - Track generation issues and troubleshoot easily
 * **Statistics Dashboard** - Monitor total posts generated and scheduling status
-* **Free Groq AI** - Uses Groq (completely free, no credit card required)
+* **Free Google Gemini AI** - Uses Google Gemini (free tier available, no credit card required)
 
 = Premium Features (Pro Version) =
 
 Upgrade to Pro for advanced capabilities:
 
-* **Multiple AI Providers** - Use OpenAI GPT-4, Claude, or any custom AI endpoint
+* **Multiple AI Providers** - Use OpenAI GPT-4o, Claude, or any custom AI endpoint
 * **Custom Post Lengths** - Set any word count from 300 to 5000 words with interactive slider
 * **Flexible Scheduling** - Post every 2, 3, 6 hours or custom intervals
 * **Multiple Categories & Tags** - Auto-assign up to 3 relevant categories and generate tags
@@ -46,9 +46,9 @@ Upgrade to Pro for advanced capabilities:
 
 = How It Works =
 
-1. Get your free Groq API key from console.groq.com
+1. Get your free Google Gemini API key from aistudio.google.com
 2. Enter your API key in the plugin settings
-3. Add your desired topics and keywords (comma-separated)
+3. Add your desired topics and keywords (one per line)
 4. Configure post frequency and publishing preferences
 5. Let WordPress Cron automatically generate content on schedule
 6. Review drafts or publish automatically - your choice!
@@ -78,19 +78,19 @@ AI content generation requires large language models (LLMs) that run on powerful
 
 The plugin sends your prompts to these external AI services where the actual content generation processing occurs on their servers.
 
-**Free Version:** Unlimited posts with Groq AI exclusively
+**Free Version:** Unlimited posts with Google Gemini AI
 
-**Service Used:** Groq (https://console.groq.com)
-- Completely free, no credit card required
-- Fast AI model (Llama 3.3-70b-versatile)
-- No cost per request
-- Get your API key: https://console.groq.com/
+**Service Used:** Google Gemini (https://ai.google.dev)
+- Free tier: 15 requests per minute
+- Fast and capable AI models
+- No credit card required for free tier
+- Get your API key: https://aistudio.google.com/app/apikey
 
-**Default API Endpoint:** https://api.groq.com/openai/v1/chat/completions
+**Default API Endpoint:** https://generativelanguage.googleapis.com/v1/models
 
 **Terms of Use & Privacy Policy:**
-- Groq Privacy Policy: https://groq.com/privacy-policy/
-- Groq Terms of Use: https://groq.com/terms-of-use/
+- Google Privacy Policy: https://policies.google.com/privacy
+- Google Gemini Terms: https://ai.google.dev/terms
 
 **Note:** The Pro version supports multiple AI providers (OpenAI, Claude, custom endpoints). When using Pro with other AI providers, refer to those providers' Terms of Use and Privacy Policy pages directly.
 
@@ -122,38 +122,26 @@ The Pro version supports multiple AI providers. When using Pro, data is transmit
 - Pro users can configure custom OpenAI-compatible API endpoints
 - When using custom endpoints, refer to those providers' Terms of Use and Privacy Policy pages directly
 
-= 2. Featured Images (Unsplash) =
+= 2. Featured Images (Pixabay) =
 
-The plugin automatically fetches relevant featured images from Unsplash's free stock photo API.
+The plugin automatically fetches relevant featured images from Pixabay's free stock photo API.
 
 **Why External Service is Required:**
-Unsplash provides access to millions of high-quality, royalty-free stock photos that are properly licensed for commercial use. This service cannot be replicated locally because:
-- Requires access to a curated library of millions of professional photos
-- Ensures proper licensing and attribution compliance
-- Provides search functionality across a vast image database
-- Maintains photographer attribution and licensing information
+Pixabay provides access to millions of high-quality, royalty-free stock photos that are properly licensed for commercial use.
 
-The plugin queries Unsplash's API to retrieve images based on your post keywords, ensuring you get properly licensed images with correct attribution.
-
-**Service:** Unsplash (https://unsplash.com)
-**API Endpoint:** https://api.unsplash.com/photos/random
-**Privacy Policy:** https://unsplash.com/privacy
-**Terms of Service:** https://unsplash.com/terms
-**License:** All photos are free to use under the Unsplash License
+**Service:** Pixabay (https://pixabay.com)
+**API Endpoint:** https://pixabay.com/api/
+**Privacy Policy:** https://pixabay.com/service/privacy/
+**Terms of Service:** https://pixabay.com/service/terms/
+**License:** All photos are free to use under the Pixabay License
 
 **Requirements:**
-- Free Unsplash API key (get it at https://unsplash.com/developers)
-- Create a free developer account
-- Register your application (demo/development tier is free)
+- Free Pixabay API key (get it at https://pixabay.com/api/docs/)
+- Register for a free Pixabay account
 
 **Data Transmitted:**
 - Search keyword only (based on your post topic)
 - No personal data is sent
-
-**Attribution:**
-- Photos are automatically attributed to photographers
-- Attribution is added to image captions (Unsplash requirement)
-- All photos are properly licensed for commercial use
 
 **Pro Version:** Pro users get multiple categories and auto-generated tags in addition to featured images.
 
@@ -161,8 +149,8 @@ The plugin queries Unsplash's API to retrieve images based on your post keywords
 
 * WordPress 5.8 or higher
 * PHP 7.4 or higher
-* Free Groq API key (https://console.groq.com)
-* Free Unsplash API key (https://unsplash.com/developers)
+* Free Google Gemini API key (https://aistudio.google.com/app/apikey)
+* Free Pixabay API key (https://pixabay.com/api/docs/)
 * Active WordPress Cron (standard on most hosts)
 
 = Documentation =
@@ -193,8 +181,8 @@ Full documentation is available in the plugin's README.md file, including:
 
 = Configuration =
 
-1. Go to Settings → Script-and-Tool-AI-Content-Writer-WordPress-Plugin
-2. Enter your API key (Groq API key for free version)
+1. Go to the plugin settings page
+2. Enter your Google Gemini API key
 4. Configure your content preferences:
    * Add keywords/topics (comma-separated)
    * Choose post length
@@ -211,19 +199,19 @@ Note: Custom prompt template editing is available in the Pro version. Free versi
 
 = Is this plugin really free? =
 
-Yes! The free version is fully functional and includes unlimited posts with Groq AI. You just need to add your own free API key from Groq (no credit card required). Premium features are available for users who need OpenAI, Claude, custom AI endpoints, bulk generation, and advanced features.
+Yes! The free version is fully functional and uses Google Gemini AI. You just need your own free Gemini API key from Google (no credit card required for free tier). Premium features are available for users who need OpenAI, Claude, custom AI endpoints, bulk generation, and advanced features.
 
 = Do I need an API key? =
 
-Yes, you'll need a free API key from Groq (https://console.groq.com) which is completely free and requires no credit card. The Pro version allows you to use OpenAI, Claude, or any custom AI endpoint.
+Yes, you'll need a free API key from Google Gemini (https://aistudio.google.com/app/apikey) which is completely free and requires no credit card. The Pro version allows you to use OpenAI, Claude, or any custom AI endpoint.
 
-= Why is the free version limited to Groq? =
+= Why is the free version limited to Gemini? =
 
-Groq offers completely free, unlimited AI API access with no credit card required, making it perfect for free users. Pro users can choose from any AI provider including OpenAI GPT-4, Claude, or custom endpoints.
+Google Gemini offers a generous free tier (15 requests per minute) with no credit card required, making it perfect for free users. Pro users can choose from any AI provider including OpenAI GPT-4o, Claude, or custom endpoints.
 
 = How much does it cost? =
 
-The plugin itself is free. However, you'll need to pay for API usage based on your AI provider's pricing. OpenAI's GPT-3.5-turbo typically costs $0.004-$0.008 per blog post depending on length.
+The plugin itself is free. Google Gemini has a generous free tier (15 requests/minute). For higher usage, Gemini paid tiers are available. Pro version supports OpenAI, Claude, and other providers with their respective pricing.
 
 = Can I review posts before they're published? =
 
@@ -235,7 +223,7 @@ The plugin includes comprehensive error handling. Failed generations are logged 
 
 = Can I use my own AI service? =
 
-The free version uses Groq AI exclusively. Pro users can use any OpenAI-compatible API including OpenAI, Claude, Azure OpenAI, LocalAI, or custom endpoints. Configure your custom endpoint in Pro settings.
+The free version uses Google Gemini exclusively. Pro users can use any OpenAI-compatible API including OpenAI, Claude, Azure OpenAI, LocalAI, or custom endpoints. Configure your custom endpoint in Pro settings.
 
 = Will this work with other AI providers? =
 
@@ -285,17 +273,17 @@ You can generate content in any language supported by your AI provider by writin
 * Tested up to WordPress 7.0.
 
 = 1.0.6 - 2026-05-10 =
-* Fixed: With AI Blog Automator Pro active, saving settings no longer overwrote the stored AI API endpoint with Groq when the provider form did not submit a separate endpoint field.
+ * Fixed: With AI Blog Automator Pro active, saving settings no longer overwrote the stored AI API endpoint when the provider form did not submit a separate endpoint field.
 
 = 1.0.5 - 2026-05-09 =
 * Added: New compatibility hook to the generator.
 
 = 1.0.4 - 2026-05-04 =
-* Fixed: Generating a post without an Unsplash API key no longer logs a featured-image error; the image step is skipped quietly.
+ * Fixed: Generating a post without an image API key no longer logs a featured-image error; the image step is skipped quietly.
 
 = 1.0.3 - 2026-05-03 =
-* Changed: Unsplash API key is no longer a required HTML field on the settings form, so you can save settings without it.
-* Improved: Clearer wording that the key is optional for saving but still needed for featured images to work.
+ * Changed: Image API key is no longer a required HTML field on the settings form, so you can save settings without it.
+ * Improved: Clearer wording that the key is optional for saving but still needed for featured images to work.
 
 = 1.0.2 - 2026-02-17 =
 * Added: SEO Optimization settings section for Pro plugin
@@ -310,7 +298,7 @@ You can generate content in any language supported by your AI provider by writin
 
 = 1.0.0 - 2025-11-26 =
 * Initial release
-* AI-powered post generation with Groq API (free, unlimited)
+ * AI-powered post generation with Google Gemini API (free tier available)
 * Automatic daily scheduling with WordPress Cron
 * Draft and publish modes
 * Pre-configured SEO-optimized prompt template (custom editing in Pro)
@@ -318,7 +306,7 @@ You can generate content in any language supported by your AI provider by writin
 * Statistics dashboard
 * Manual post generation
 * Intelligent category assignment
-* Automatic featured images from Unsplash
+ * Automatic featured images from Pixabay
 * Smart keyword selection based on recent posts
 * WordPress Cron integration
 * Security: Nonce verification, capability checks, input sanitization
@@ -333,10 +321,10 @@ Fixes manual post generation counter and redirect; adds a generating indicator o
 Pro users: update so your chosen AI provider endpoint is preserved when you save settings (fixes wrong host / invalid API key style errors after save).
 
 = 1.0.4 =
-Posts generate cleanly without an Unsplash key; featured images are only fetched when a key is saved.
+Posts generate cleanly without an image API key; featured images are only fetched when a key is saved.
 
 = 1.0.3 =
-You can save plugin settings without an Unsplash key; add a key when you want automatic featured images.
+You can save plugin settings without an image API key; add a key when you want automatic featured images.
 
 = 1.0.0 =
 Initial release of AI Blog Automator. Automatically generate SEO-optimized blog posts using AI!
@@ -350,7 +338,7 @@ This plugin does not collect, store, or transmit any user data from your WordPre
 - Basic API request parameters
 
 **Where data is sent:**
-- To your configured AI API endpoint (by default: Groq API)
+- To your configured AI API endpoint (by default: Google Gemini API)
 - No data is sent to the plugin developers
 - No tracking or analytics are performed by this plugin
 
@@ -366,10 +354,10 @@ This plugin does not collect, store, or transmit any user data from your WordPre
 - Ensure compliance with privacy laws in your jurisdiction
 
 **Third-party services:**
-- Groq Privacy Policy: https://groq.com/privacy-policy/
-- Groq Terms of Use: https://groq.com/terms-of-use/
-- Unsplash Privacy Policy: https://unsplash.com/privacy
-- Unsplash Terms of Service: https://unsplash.com/terms
+- Google Privacy Policy: https://policies.google.com/privacy
+- Google Gemini Terms: https://ai.google.dev/terms
+- Pixabay Privacy Policy: https://pixabay.com/service/privacy/
+- Pixabay Terms of Service: https://pixabay.com/service/terms/
 - Note: Pro version supports additional AI providers (OpenAI, Claude, etc.) - when using Pro with other providers, refer to those providers' Terms of Use and Privacy Policy pages directly
 
 == Support ==

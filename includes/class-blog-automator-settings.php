@@ -6,15 +6,39 @@
 
 defined('ABSPATH') || exit;
 
-class WebPenter_ABA_Settings
+class WebPenter_ABM_Settings
 {
-  const OPTION_NAME = 'webpenter_aba_settings';
-  const ERRORS_OPTION = 'webpenter_aba_errors';
-  const LOGS_PAGE_SLUG = 'ai-blog-automator-logs';
+  const OPTION_NAME = 'webpenter_abm_settings';
+  const ERRORS_OPTION = 'webpenter_abm_errors';
+  const LOGS_PAGE_SLUG = 'ai-blog-master-logs';
 
   public static function init_error_handlers()
   {
-    add_action('admin_post_webpenter_aba_clear_errors', array(__CLASS__, 'handle_clear_errors'));
+    add_action('admin_post_webpenter_abm_clear_errors', array(__CLASS__, 'handle_clear_errors'));
+    add_action('wp_ajax_abm_test_api', array(__CLASS__, 'handle_test_api'));
+  }
+
+  public static function handle_test_api()
+  {
+    check_ajax_referer('abm_test_api_nonce', 'nonce');
+    if (!current_user_can('manage_options')) {
+      wp_send_json_error('Unauthorized');
+    }
+
+    $provider = isset($_POST['provider']) ? sanitize_text_field($_POST['provider']) : 'gemini';
+    $api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
+
+    if (empty($api_key)) {
+      wp_send_json_error('API Key is empty');
+    }
+
+    $result = WebPenter_ABM_Generator::test_api_connection($provider, $api_key);
+
+    if (is_wp_error($result)) {
+      wp_send_json_error($result->get_error_message());
+    } else {
+      wp_send_json_success('Connection successful!');
+    }
   }
 
   public static function get_recent_errors()
@@ -45,7 +69,7 @@ class WebPenter_ABA_Settings
   public static function handle_clear_errors()
   {
     if (!current_user_can('manage_options')) return;
-    check_admin_referer('webpenter_aba_clear_errors');
+    check_admin_referer('webpenter_abm_clear_errors');
     delete_option(self::ERRORS_OPTION);
     wp_safe_redirect(add_query_arg(array('page' => self::LOGS_PAGE_SLUG, 'errors_cleared' => '1'), admin_url('admin.php')));
     exit;
@@ -54,10 +78,10 @@ class WebPenter_ABA_Settings
   public static function add_admin_menu()
   {
     add_menu_page(
-      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-automator'),
-      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-automator'),
+      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-master'),
+      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-master'),
       'manage_options',
-      'ai-blog-automator-settings',
+      'ai-blog-master-settings',
       array(__CLASS__, 'render_settings_page'),
       'dashicons-edit',
       30
@@ -67,14 +91,14 @@ class WebPenter_ABA_Settings
   public static function add_logs_menu()
   {
     $error_count = count(self::get_recent_errors());
-    $logs_menu_title = __('Logs', 'ai-blog-automator');
+    $logs_menu_title = __('Logs', 'ai-blog-master');
     if ($error_count > 0) {
       $logs_menu_title .= sprintf(' <span class="awaiting-mod"><span class="pending-count">%d</span></span>', $error_count);
     }
     
     add_submenu_page(
-      'ai-blog-automator-settings',
-      __('Logs & Debug', 'ai-blog-automator'),
+      'ai-blog-master-settings',
+      __('Logs & Debug', 'ai-blog-master'),
       $logs_menu_title,
       'manage_options',
       self::LOGS_PAGE_SLUG,
@@ -85,30 +109,35 @@ class WebPenter_ABA_Settings
   public static function render_logs_page()
   {
     if (!current_user_can('manage_options')) return;
-    include WEBPENTER_ABA_PLUGIN_DIR . 'includes/templates/logs-page.php';
+    include WEBPENTER_ABM_PLUGIN_DIR . 'includes/templates/logs-page.php';
   }
 
   public static function register_settings()
   {
-    register_setting('webpenter_aba_settings_group', self::OPTION_NAME, array(__CLASS__, 'sanitize_settings'));
+    register_setting('webpenter_abm_settings_group', self::OPTION_NAME, array(__CLASS__, 'sanitize_settings'));
   }
 
   public static function enqueue_admin_styles($hook)
   {
     $allowed_hooks = array(
-      'toplevel_page_ai-blog-automator-settings',
-      'ai-blog-automator_page_' . self::LOGS_PAGE_SLUG,
+      'toplevel_page_ai-blog-master-settings',
+      'ai-blog-master_page_' . self::LOGS_PAGE_SLUG,
     );
     if (!in_array($hook, $allowed_hooks, true)) return;
 
-    wp_enqueue_style('webpenter-aba-admin', WEBPENTER_ABA_PLUGIN_URL . 'assets/admin.css', array(), WEBPENTER_ABA_VERSION);
-    wp_enqueue_script('webpenter-aba-admin', WEBPENTER_ABA_PLUGIN_URL . 'assets/admin.js', array('jquery'), WEBPENTER_ABA_VERSION, true);
+    wp_enqueue_style('webpenter-abm-admin', WEBPENTER_ABM_PLUGIN_URL . 'assets/admin.css', array(), WEBPENTER_ABM_VERSION);
+    wp_enqueue_script('webpenter-abm-admin', WEBPENTER_ABM_PLUGIN_URL . 'assets/admin.js', array('jquery'), WEBPENTER_ABM_VERSION, true);
+
+    wp_localize_script('webpenter-abm-admin', 'abm_vars', array(
+      'ajax_url' => admin_url('admin-ajax.php'),
+      'nonce'    => wp_create_nonce('abm_test_api_nonce')
+    ));
   }
 
   public static function render_settings_page()
   {
     if (!current_user_can('manage_options')) return;
-    include WEBPENTER_ABA_PLUGIN_DIR . 'includes/templates/settings-page.php';
+    include WEBPENTER_ABM_PLUGIN_DIR . 'includes/templates/settings-page.php';
   }
 
   public static function get_settings()

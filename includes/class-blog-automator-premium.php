@@ -14,7 +14,7 @@ defined('ABSPATH') || exit;
 /**
  * Premium Features Class
  */
-class WebPenter_ABA_Premium
+class WebPenter_ABM_Premium
 {
 
   /**
@@ -24,8 +24,8 @@ class WebPenter_ABA_Premium
    */
   public static function is_active()
   {
-    return class_exists('WebPenter_ABA_Pro') &&
-      apply_filters('webpenter_aba_pro_is_active', false);
+    return class_exists('WebPenter_ABM_Pro') &&
+      apply_filters('webpenter_abm_pro_is_active', false);
   }
 
   /**
@@ -40,7 +40,7 @@ class WebPenter_ABA_Premium
       return false;
     }
 
-    $available_features = apply_filters('webpenter_aba_pro_features', array());
+    $available_features = apply_filters('webpenter_abm_pro_features', array());
     return in_array($feature, $available_features, true);
   }
 
@@ -52,7 +52,7 @@ class WebPenter_ABA_Premium
    */
   public static function get_upgrade_url($source = 'general')
   {
-    $url = 'https://webpenter.com/ai-blog-automator/';
+    $url = 'https://webpenter.com/ai-blog-master/';
 
     // Add UTM parameters for tracking
     $url = add_query_arg(array(
@@ -61,7 +61,7 @@ class WebPenter_ABA_Premium
       'utm_campaign' => 'upgrade'
     ), $url);
 
-    return apply_filters('webpenter_aba_upgrade_url', $url, $source);
+    return apply_filters('webpenter_abm_upgrade_url', $url, $source);
   }
 
   /**
@@ -73,43 +73,43 @@ class WebPenter_ABA_Premium
   {
     return array(
       'ai_providers' => array(
-        'title' => __('Multiple AI Providers', 'ai-blog-automator'),
-        'description' => __('Choose OpenAI GPT-4, Claude, or custom AI endpoints', 'ai-blog-automator'),
+        'title' => __('Multiple AI Providers', 'ai-blog-master'),
+        'description' => __('Choose OpenAI GPT-4, Claude, or custom AI endpoints', 'ai-blog-master'),
         'icon' => 'dashicons-cloud'
       ),
       'custom_lengths' => array(
-        'title' => __('Custom Post Lengths', 'ai-blog-automator'),
-        'description' => __('Set any word count from 300 to 5000 words with slider', 'ai-blog-automator'),
+        'title' => __('Custom Post Lengths', 'ai-blog-master'),
+        'description' => __('Set any word count from 300 to 5000 words with slider', 'ai-blog-master'),
         'icon' => 'dashicons-edit'
       ),
       'custom_schedules' => array(
-        'title' => __('Custom Schedules', 'ai-blog-automator'),
-        'description' => __('Post every 2, 3, 6 hours or custom intervals', 'ai-blog-automator'),
+        'title' => __('Custom Schedules', 'ai-blog-master'),
+        'description' => __('Post every 2, 3, 6 hours or custom intervals', 'ai-blog-master'),
         'icon' => 'dashicons-clock'
       ),
       'multiple_categories' => array(
-        'title' => __('Multiple Categories & Tags', 'ai-blog-automator'),
-        'description' => __('Auto-assign multiple relevant categories and generate tags', 'ai-blog-automator'),
+        'title' => __('Multiple Categories & Tags', 'ai-blog-master'),
+        'description' => __('Auto-assign multiple relevant categories and generate tags', 'ai-blog-master'),
         'icon' => 'dashicons-category'
       ),
       'template_library' => array(
-        'title' => __('12+ Prompt Templates', 'ai-blog-automator'),
-        'description' => __('How-To, Listicle, Case Study, and more formats', 'ai-blog-automator'),
+        'title' => __('12+ Prompt Templates', 'ai-blog-master'),
+        'description' => __('How-To, Listicle, Case Study, and more formats', 'ai-blog-master'),
         'icon' => 'dashicons-media-document'
       ),
       'custom_prompt' => array(
-        'title' => __('Custom Prompt Template Editor', 'ai-blog-automator'),
-        'description' => __('Fully customize AI prompts to match your content style and requirements', 'ai-blog-automator'),
+        'title' => __('Custom Prompt Template Editor', 'ai-blog-master'),
+        'description' => __('Fully customize AI prompts to match your content style and requirements', 'ai-blog-master'),
         'icon' => 'dashicons-edit'
       ),
       'seo_optimization' => array(
-        'title' => __('SEO Optimization', 'ai-blog-automator'),
-        'description' => __('Auto-generate meta descriptions for Yoast, Rank Math, AIOSEO', 'ai-blog-automator'),
+        'title' => __('SEO Optimization', 'ai-blog-master'),
+        'description' => __('Auto-generate meta descriptions for Yoast, Rank Math, AIOSEO', 'ai-blog-master'),
         'icon' => 'dashicons-search'
       ),
       'bulk_generation' => array(
-        'title' => __('Bulk Post Generation', 'ai-blog-automator'),
-        'description' => __('Generate multiple posts at once from keyword list', 'ai-blog-automator'),
+        'title' => __('Bulk Post Generation', 'ai-blog-master'),
+        'description' => __('Generate multiple posts at once from keyword list', 'ai-blog-master'),
         'icon' => 'dashicons-admin-page'
       )
     );
@@ -153,18 +153,18 @@ class WebPenter_ABA_Premium
   private static function render_upgrade_inline($feature_info)
   {
 ?>
-    <div class="ai-blog-automator-upgrade-notice inline">
+    <div class="ai-blog-master-upgrade-notice inline">
       <span class="dashicons dashicons-lock"></span>
       <?php if ($feature_info): ?>
         <strong><?php echo esc_html($feature_info['title']); ?></strong> -
         <?php echo esc_html($feature_info['description']); ?>
       <?php else: ?>
-        <?php esc_html_e('This is a premium feature', 'ai-blog-automator'); ?>
+        <?php esc_html_e('This is a premium feature', 'ai-blog-master'); ?>
       <?php endif; ?>
       <a href="<?php echo esc_url(self::get_upgrade_url('inline_' . ($feature_info ? $feature_info['title'] : 'general'))); ?>"
         class="button button-primary button-small"
         target="_blank">
-        <?php esc_html_e('Upgrade to Pro', 'ai-blog-automator'); ?>
+        <?php esc_html_e('Upgrade to Pro', 'ai-blog-master'); ?>
       </a>
     </div>
   <?php
@@ -176,20 +176,20 @@ class WebPenter_ABA_Premium
   private static function render_upgrade_banner()
   {
   ?>
-    <div class="ai-blog-automator-upgrade-banner">
+    <div class="ai-blog-master-upgrade-banner">
       <div class="upgrade-banner-content">
         <div class="upgrade-banner-icon">
           <span class="dashicons dashicons-star-filled"></span>
         </div>
         <div class="upgrade-banner-text">
-          <h3><?php esc_html_e('Unlock More Powerful Features', 'ai-blog-automator'); ?></h3>
-          <p><?php esc_html_e('Upgrade to Pro for multiple AI providers, bulk generation, and more!', 'ai-blog-automator'); ?></p>
+          <h3><?php esc_html_e('Unlock More Powerful Features', 'ai-blog-master'); ?></h3>
+          <p><?php esc_html_e('Upgrade to Pro for multiple AI providers, bulk generation, and more!', 'ai-blog-master'); ?></p>
         </div>
         <div class="upgrade-banner-action">
           <a href="<?php echo esc_url(self::get_upgrade_url('banner')); ?>"
             class="button button-primary button-hero"
             target="_blank">
-            <?php esc_html_e('View Pro Features', 'ai-blog-automator'); ?>
+            <?php esc_html_e('View Pro Features', 'ai-blog-master'); ?>
           </a>
         </div>
       </div>
@@ -205,12 +205,12 @@ class WebPenter_ABA_Premium
   private static function render_upgrade_modal($feature_info)
   {
   ?>
-    <div class="ai-blog-automator-upgrade-modal" style="display:none;">
+    <div class="ai-blog-master-upgrade-modal" style="display:none;">
       <div class="upgrade-modal-content">
         <span class="upgrade-modal-close">&times;</span>
         <div class="upgrade-modal-header">
           <span class="dashicons dashicons-unlock"></span>
-          <h2><?php esc_html_e('Upgrade to Script-and-Tool-AI-Content-Writer-WordPress-Plugin Pro', 'ai-blog-automator'); ?></h2>
+          <h2><?php esc_html_e('Upgrade to Script-and-Tool-AI-Content-Writer-WordPress-Plugin Pro', 'ai-blog-master'); ?></h2>
         </div>
 
         <?php if ($feature_info): ?>
@@ -222,7 +222,7 @@ class WebPenter_ABA_Premium
         <?php endif; ?>
 
         <div class="upgrade-modal-features">
-          <h4><?php esc_html_e('Premium Features Include:', 'ai-blog-automator'); ?></h4>
+          <h4><?php esc_html_e('Premium Features Include:', 'ai-blog-master'); ?></h4>
           <ul>
             <?php foreach (self::get_premium_features() as $feature): ?>
               <li>
@@ -237,10 +237,10 @@ class WebPenter_ABA_Premium
           <a href="<?php echo esc_url(self::get_upgrade_url('modal')); ?>"
             class="button button-primary button-hero"
             target="_blank">
-            <?php esc_html_e('Upgrade Now', 'ai-blog-automator'); ?>
+            <?php esc_html_e('Upgrade Now', 'ai-blog-master'); ?>
           </a>
           <p class="upgrade-modal-guarantee">
-            <?php esc_html_e('30-day money-back guarantee', 'ai-blog-automator'); ?>
+            <?php esc_html_e('30-day money-back guarantee', 'ai-blog-master'); ?>
           </p>
         </div>
       </div>
@@ -257,7 +257,7 @@ class WebPenter_ABA_Premium
       return;
     }
 
-    add_action('webpenter_aba_settings_tabs', array(__CLASS__, 'render_premium_tab'));
+    add_action('webpenter_abm_settings_tabs', array(__CLASS__, 'render_premium_tab'));
   }
 
   /**
@@ -266,10 +266,10 @@ class WebPenter_ABA_Premium
   public static function render_premium_tab()
   {
   ?>
-    <div class="ai-blog-automator-card premium-features-card">
+    <div class="ai-blog-master-card premium-features-card">
       <h2>
         <span class="dashicons dashicons-star-filled" style="color: #FFD700;"></span>
-        <?php esc_html_e('Premium Features', 'ai-blog-automator'); ?>
+        <?php esc_html_e('Premium Features', 'ai-blog-master'); ?>
       </h2>
 
       <div class="premium-features-grid">
@@ -285,25 +285,25 @@ class WebPenter_ABA_Premium
       </div>
 
       <div class="premium-features-cta">
-        <h3><?php esc_html_e('Ready to unlock these features?', 'ai-blog-automator'); ?></h3>
-        <p><?php esc_html_e('Get instant access to all premium features with our Pro version.', 'ai-blog-automator'); ?></p>
+        <h3><?php esc_html_e('Ready to unlock these features?', 'ai-blog-master'); ?></h3>
+        <p><?php esc_html_e('Get instant access to all premium features with our Pro version.', 'ai-blog-master'); ?></p>
 
         <div class="premium-pricing">
           <div class="price-box">
-            <div class="price-label"><?php esc_html_e('Personal', 'ai-blog-automator'); ?></div>
+            <div class="price-label"><?php esc_html_e('Personal', 'ai-blog-master'); ?></div>
             <div class="price-amount">$49<span> Lifetime</span></div>
-            <div class="price-sites"><?php esc_html_e('1 Site', 'ai-blog-automator'); ?></div>
+            <div class="price-sites"><?php esc_html_e('1 Site', 'ai-blog-master'); ?></div>
           </div>
           <div class="price-box featured">
-            <div class="price-badge"><?php esc_html_e('Most Popular', 'ai-blog-automator'); ?></div>
-            <div class="price-label"><?php esc_html_e('Professional', 'ai-blog-automator'); ?></div>
+            <div class="price-badge"><?php esc_html_e('Most Popular', 'ai-blog-master'); ?></div>
+            <div class="price-label"><?php esc_html_e('Professional', 'ai-blog-master'); ?></div>
             <div class="price-amount">$99<span> Lifetime</span></div>
-            <div class="price-sites"><?php esc_html_e('5 Sites', 'ai-blog-automator'); ?></div>
+            <div class="price-sites"><?php esc_html_e('5 Sites', 'ai-blog-master'); ?></div>
           </div>
           <div class="price-box">
-            <div class="price-label"><?php esc_html_e('Agency', 'ai-blog-automator'); ?></div>
+            <div class="price-label"><?php esc_html_e('Agency', 'ai-blog-master'); ?></div>
             <div class="price-amount">$199<span> Lifetime</span></div>
-            <div class="price-sites"><?php esc_html_e('Unlimited Sites', 'ai-blog-automator'); ?></div>
+            <div class="price-sites"><?php esc_html_e('Unlimited Sites', 'ai-blog-master'); ?></div>
           </div>
         </div>
 
@@ -311,15 +311,15 @@ class WebPenter_ABA_Premium
           <a href="<?php echo esc_url(self::get_upgrade_url('pricing_tab')); ?>"
             class="button button-primary button-hero"
             target="_blank">
-            <?php esc_html_e('View All Plans & Pricing', 'ai-blog-automator'); ?>
+            <?php esc_html_e('View All Plans & Pricing', 'ai-blog-master'); ?>
           </a>
         </p>
 
         <p style="text-align: center; color: #666; margin-top: 15px;">
           <small>
-            <?php esc_html_e('✓ 30-day money-back guarantee', 'ai-blog-automator'); ?> •
-            <?php esc_html_e('✓ Instant activation', 'ai-blog-automator'); ?> •
-            <?php esc_html_e('✓ Regular updates', 'ai-blog-automator'); ?>
+            <?php esc_html_e('✓ 30-day money-back guarantee', 'ai-blog-master'); ?> •
+            <?php esc_html_e('✓ Instant activation', 'ai-blog-master'); ?> •
+            <?php esc_html_e('✓ Regular updates', 'ai-blog-master'); ?>
           </small>
         </p>
       </div>
@@ -333,7 +333,7 @@ class WebPenter_ABA_Premium
   public static function enqueue_premium_styles()
   {
     wp_add_inline_style('wp-admin', '
-            .ai-blog-automator-upgrade-notice {
+            .ai-blog-master-upgrade-notice {
                 background: #fff3cd;
                 border-left: 4px solid #ffc107;
                 padding: 12px;
@@ -342,14 +342,14 @@ class WebPenter_ABA_Premium
                 align-items: center;
                 gap: 10px;
             }
-            .ai-blog-automator-upgrade-notice .dashicons {
+            .ai-blog-master-upgrade-notice .dashicons {
                 color: #856404;
             }
-            .ai-blog-automator-upgrade-notice .button {
+            .ai-blog-master-upgrade-notice .button {
                 margin-left: auto;
             }
             
-            .ai-blog-automator-upgrade-banner {
+            .ai-blog-master-upgrade-banner {
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
                 padding: 30px;

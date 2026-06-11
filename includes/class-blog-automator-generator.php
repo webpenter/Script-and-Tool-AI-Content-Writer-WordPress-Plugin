@@ -5,39 +5,39 @@
 
 defined('ABSPATH') || exit;
 
-class WebPenter_ABA_Generator
+class WebPenter_ABM_Generator
 {
   public static function get_posts_count()
   {
-    return (int) get_option('webpenter_aba_posts_count', 0);
+    return (int) get_option('webpenter_abm_posts_count', 0);
   }
 
   public static function increment_posts_count()
   {
     $count = self::get_posts_count();
-    update_option('webpenter_aba_posts_count', $count + 1);
+    update_option('webpenter_abm_posts_count', $count + 1);
   }
 
   public static function generate_batch()
   {
-    $settings = WebPenter_ABA_Settings::get_settings();
+    $settings = WebPenter_ABM_Settings::get_settings();
     $batch_size = (int) $settings['posts_per_batch'];
     if ($batch_size < 1) $batch_size = 1;
 
     for ($i = 0; $i < $batch_size; $i++) {
       $result = self::generate_single_post();
       if (is_wp_error($result)) {
-        WebPenter_ABA_Settings::add_error('Generation Failed: ' . $result->get_error_message());
+        WebPenter_ABM_Settings::add_error('Generation Failed: ' . $result->get_error_message());
       }
     }
     
     // Update last run time
-    WebPenter_ABA_Settings::update_setting('last_run', current_time('mysql', true));
+    WebPenter_ABM_Settings::update_setting('last_run', current_time('mysql', true));
   }
 
   public static function generate_single_post()
   {
-    $settings = WebPenter_ABA_Settings::get_settings();
+    $settings = WebPenter_ABM_Settings::get_settings();
 
     // Check API Keys based on provider
     $provider = isset($settings['ai_provider']) ? $settings['ai_provider'] : 'gemini';
@@ -108,7 +108,7 @@ class WebPenter_ABA_Generator
 
     // Append Affiliate Code
     if (!empty($settings['affiliate_code'])) {
-        $content .= "\n\n<div class='aba-affiliate-box'>" . $settings['affiliate_code'] . "</div>";
+        $content .= "\n\n<div class='abm-affiliate-box'>" . $settings['affiliate_code'] . "</div>";
     }
 
     // 2. Insert Post
@@ -138,10 +138,10 @@ class WebPenter_ABA_Generator
             if (!is_wp_error($attach_id)) {
                 set_post_thumbnail($post_id, $attach_id);
             } else {
-                WebPenter_ABA_Settings::add_error('Image upload failed: ' . $attach_id->get_error_message());
+                WebPenter_ABM_Settings::add_error('Image upload failed: ' . $attach_id->get_error_message());
             }
         } else if (is_wp_error($image_url)) {
-            WebPenter_ABA_Settings::add_error('Pixabay API Error: ' . $image_url->get_error_message());
+            WebPenter_ABM_Settings::add_error('Pixabay API Error: ' . $image_url->get_error_message());
         }
     }
 
@@ -158,6 +158,18 @@ class WebPenter_ABA_Generator
     }
 
     return $post_id;
+  }
+
+  public static function test_api_connection($provider, $api_key)
+  {
+    $prompt = "Test connection. Reply with only the word 'OK'.";
+    if ($provider === 'groq') {
+      return self::call_groq_api($prompt, $api_key);
+    } elseif ($provider === 'pixabay') {
+      return self::call_pixabay_api('nature', $api_key);
+    } else {
+      return self::call_gemini_api($prompt, $api_key);
+    }
   }
 
   private static function call_gemini_api($prompt, $api_key)

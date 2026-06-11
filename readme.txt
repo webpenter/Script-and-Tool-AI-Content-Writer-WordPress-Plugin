@@ -273,7 +273,7 @@ You can generate content in any language supported by your AI provider by writin
 * Tested up to WordPress 7.0.
 
 = 1.0.6 - 2026-05-10 =
- * Fixed: With AI Blog Automator Pro active, saving settings no longer overwrote the stored AI API endpoint when the provider form did not submit a separate endpoint field.
+ * Fixed: With AI Blog Master Pro active, saving settings no longer overwrote the stored AI API endpoint when the provider form did not submit a separate endpoint field.
 
 = 1.0.5 - 2026-05-09 =
 * Added: New compatibility hook to the generator.
@@ -327,7 +327,7 @@ Posts generate cleanly without an image API key; featured images are only fetche
 You can save plugin settings without an image API key; add a key when you want automatic featured images.
 
 = 1.0.0 =
-Initial release of AI Blog Automator. Automatically generate SEO-optimized blog posts using AI!
+Initial release of AI Blog Master. Automatically generate SEO-optimized blog posts using AI!
 
 == Privacy Policy ==
 

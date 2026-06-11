@@ -10,70 +10,70 @@ get_header();
 <!-- Custom CSS for Modern Blog Layout -->
 <style>
   :root {
-    --aba-primary: #3b82f6;
-    --aba-primary-hover: #2563eb;
-    --aba-text-dark: #1f2937;
-    --aba-text-muted: #6b7280;
-    --aba-bg-card: #ffffff;
-    --aba-bg-light: #f9fafb;
-    --aba-border: #e5e7eb;
-    --aba-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --aba-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --aba-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --aba-radius-sm: 8px;
-    --aba-radius-md: 12px;
-    --aba-radius-lg: 16px;
+    --abm-primary: #3b82f6;
+    --abm-primary-hover: #2563eb;
+    --abm-text-dark: #1f2937;
+    --abm-text-muted: #6b7280;
+    --abm-bg-card: #ffffff;
+    --abm-bg-light: #f9fafb;
+    --abm-border: #e5e7eb;
+    --abm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --abm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --abm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --abm-radius-sm: 8px;
+    --abm-radius-md: 12px;
+    --abm-radius-lg: 16px;
   }
 
   body {
-    background-color: var(--aba-bg-light);
-    color: var(--aba-text-dark);
+    background-color: var(--abm-bg-light);
+    color: var(--abm-text-dark);
   }
 
-  .aba-single-wrapper {
+  .abm-single-wrapper {
     max-width: 1200px;
     margin: 40px auto;
     padding: 0 20px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
-  .aba-grid {
+  .abm-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 40px;
   }
 
   @media (min-width: 992px) {
-    .aba-grid {
+    .abm-grid {
       grid-template-columns: 2.2fr 1fr;
     }
   }
 
   /* Main Content Card */
-  .aba-main-content {
-    background: var(--aba-bg-card);
-    border: 1px solid var(--aba-border);
-    border-radius: var(--aba-radius-lg);
+  .abm-main-content {
+    background: var(--abm-bg-card);
+    border: 1px solid var(--abm-border);
+    border-radius: var(--abm-radius-lg);
     padding: 30px;
-    box-shadow: var(--aba-shadow-md);
+    box-shadow: var(--abm-shadow-md);
   }
 
-  .aba-back-btn {
+  .abm-back-btn {
     display: inline-flex;
     align-items: center;
     font-size: 14px;
     font-weight: 500;
-    color: var(--aba-primary);
+    color: var(--abm-primary);
     text-decoration: none;
     margin-bottom: 20px;
     transition: color 0.2s ease;
   }
 
-  .aba-back-btn:hover {
-    color: var(--aba-primary-hover);
+  .abm-back-btn:hover {
+    color: var(--abm-primary-hover);
   }
 
-  .aba-post-title {
+  .abm-post-title {
     font-size: 28px;
     font-weight: 800;
     line-height: 1.25;
@@ -82,44 +82,44 @@ get_header();
   }
 
   @media (min-width: 768px) {
-    .aba-post-title {
+    .abm-post-title {
       font-size: 36px;
     }
   }
 
   /* Meta styling */
-  .aba-post-meta {
+  .abm-post-meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 15px;
     font-size: 14px;
-    color: var(--aba-text-muted);
-    border-bottom: 1px solid var(--aba-border);
+    color: var(--abm-text-muted);
+    border-bottom: 1px solid var(--abm-border);
     padding-bottom: 20px;
     margin-bottom: 25px;
   }
 
-  .aba-meta-item {
+  .abm-meta-item {
     display: flex;
     align-items: center;
     gap: 6px;
   }
 
-  .aba-meta-author {
+  .abm-meta-author {
     font-weight: 600;
-    color: var(--aba-text-dark);
+    color: var(--abm-text-dark);
   }
 
   /* Featured Image */
-  .aba-post-thumbnail {
+  .abm-post-thumbnail {
     margin-bottom: 30px;
-    border-radius: var(--aba-radius-md);
+    border-radius: var(--abm-radius-md);
     overflow: hidden;
-    box-shadow: var(--aba-shadow-sm);
+    box-shadow: var(--abm-shadow-sm);
   }
 
-  .aba-post-thumbnail img {
+  .abm-post-thumbnail img {
     width: 100%;
     height: auto;
     max-height: 500px;
@@ -128,17 +128,17 @@ get_header();
   }
 
   /* Article Content */
-  .aba-article-body {
+  .abm-article-body {
     font-size: 18px;
     line-height: 1.8;
     color: #374151;
   }
 
-  .aba-article-body p {
+  .abm-article-body p {
     margin-bottom: 24px;
   }
 
-  .aba-article-body h2 {
+  .abm-article-body h2 {
     font-size: 24px;
     font-weight: 700;
     margin-top: 40px;
@@ -146,7 +146,7 @@ get_header();
     color: #111827;
   }
 
-  .aba-article-body h3 {
+  .abm-article-body h3 {
     font-size: 20px;
     font-weight: 600;
     margin-top: 30px;
@@ -154,28 +154,28 @@ get_header();
     color: #111827;
   }
 
-  .aba-article-body ul, .aba-article-body ol {
+  .abm-article-body ul, .abm-article-body ol {
     margin-bottom: 24px;
     padding-left: 20px;
   }
 
-  .aba-article-body li {
+  .abm-article-body li {
     margin-bottom: 8px;
   }
 
   /* Tags Styling */
-  .aba-post-tags {
+  .abm-post-tags {
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid var(--aba-border);
+    border-top: 1px solid var(--abm-border);
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
 
-  .aba-tag {
+  .abm-tag {
     background: #eff6ff;
-    color: var(--aba-primary);
+    color: var(--abm-primary);
     padding: 6px 12px;
     font-size: 13px;
     font-weight: 500;
@@ -184,37 +184,37 @@ get_header();
     transition: background 0.2s ease, color 0.2s ease;
   }
 
-  .aba-tag:hover {
-    background: var(--aba-primary);
+  .abm-tag:hover {
+    background: var(--abm-primary);
     color: #ffffff;
   }
 
   /* Sidebar styling */
-  .aba-sidebar {
+  .abm-sidebar {
     display: flex;
     flex-direction: column;
     gap: 30px;
   }
 
-  .aba-sidebar-widget {
-    background: var(--aba-bg-card);
-    border: 1px solid var(--aba-border);
-    border-radius: var(--aba-radius-lg);
+  .abm-sidebar-widget {
+    background: var(--abm-bg-card);
+    border: 1px solid var(--abm-border);
+    border-radius: var(--abm-radius-lg);
     padding: 24px;
-    box-shadow: var(--aba-shadow-md);
+    box-shadow: var(--abm-shadow-md);
   }
 
-  .aba-widget-title {
+  .abm-widget-title {
     font-size: 18px;
     font-weight: 700;
     color: #111827;
     margin: 0 0 20px 0;
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--aba-primary);
+    border-bottom: 2px solid var(--abm-primary);
     display: inline-block;
   }
 
-  .aba-sidebar-list {
+  .abm-sidebar-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -223,56 +223,56 @@ get_header();
     margin: 0;
   }
 
-  .aba-sidebar-item {
+  .abm-sidebar-item {
     display: flex;
     gap: 12px;
     align-items: center;
   }
 
-  .aba-sidebar-thumb {
+  .abm-sidebar-thumb {
     width: 64px;
     height: 64px;
     flex-shrink: 0;
-    border-radius: var(--aba-radius-sm);
+    border-radius: var(--abm-radius-sm);
     overflow: hidden;
     background: #e5e7eb;
   }
 
-  .aba-sidebar-thumb img {
+  .abm-sidebar-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .aba-sidebar-info {
+  .abm-sidebar-info {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
 
-  .aba-sidebar-post-title {
+  .abm-sidebar-post-title {
     font-size: 14px;
     font-weight: 600;
     line-height: 1.4;
     margin: 0;
   }
 
-  .aba-sidebar-post-title a {
+  .abm-sidebar-post-title a {
     color: #1f2937;
     text-decoration: none;
     transition: color 0.2s ease;
   }
 
-  .aba-sidebar-post-title a:hover {
-    color: var(--aba-primary);
+  .abm-sidebar-post-title a:hover {
+    color: var(--abm-primary);
   }
 
-  .aba-sidebar-date {
+  .abm-sidebar-date {
     font-size: 12px;
-    color: var(--aba-text-muted);
+    color: var(--abm-text-muted);
   }
 
-  .aba-affiliate-box {
+  .abm-affiliate-box {
     margin-top: 30px;
     padding: 20px;
     background: #fef3c7;
@@ -282,29 +282,29 @@ get_header();
   }
 </style>
 
-<div class="aba-single-wrapper">
+<div class="abm-single-wrapper">
   <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-    <div class="aba-grid">
+    <div class="abm-grid">
       <!-- Main Content -->
-      <main class="aba-main-content">
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="aba-back-btn">
+      <main class="abm-main-content">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="abm-back-btn">
           <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 6px;">
             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
           </svg>
           Back to Home
         </a>
 
-        <h1 class="aba-post-title"><?php the_title(); ?></h1>
+        <h1 class="abm-post-title"><?php the_title(); ?></h1>
 
-        <div class="aba-post-meta">
-          <span class="aba-meta-item">
+        <div class="abm-post-meta">
+          <span class="abm-meta-item">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
             </svg>
-            <span class="aba-meta-author"><?php the_author(); ?></span>
+            <span class="abm-meta-author"><?php the_author(); ?></span>
           </span>
 
-          <span class="aba-meta-item">
+          <span class="abm-meta-item">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M6 2a1 1 0 00-1-1h3a1 1 0 000 2H5V5h10V3h-2a1 1 0 100-2h3a1 1 0 001 1v14a1 1 0 00-1 1H3a1 1 0 00-1-1V2zm3 6a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1zm0 4a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1z" clip-rule="evenodd" />
             </svg>
@@ -315,7 +315,7 @@ get_header();
           $categories = get_the_category();
           if (!empty($categories)) :
           ?>
-            <span class="aba-meta-item">
+            <span class="abm-meta-item">
               <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd" />
               </svg>
@@ -325,12 +325,12 @@ get_header();
         </div>
 
         <?php if (has_post_thumbnail()) : ?>
-          <div class="aba-post-thumbnail">
+          <div class="abm-post-thumbnail">
             <?php the_post_thumbnail('full'); ?>
           </div>
         <?php endif; ?>
 
-        <article class="aba-article-body">
+        <article class="abm-article-body">
           <?php the_content(); ?>
         </article>
 
@@ -338,19 +338,19 @@ get_header();
         $tags = get_the_tags();
         if (!empty($tags)) :
         ?>
-          <div class="aba-post-tags">
+          <div class="abm-post-tags">
             <?php foreach ($tags as $tag) : ?>
-              <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="aba-tag">#<?php echo esc_html($tag->name); ?></a>
+              <a href="<?php echo esc_url(get_tag_link($tag->term_id)); ?>" class="abm-tag">#<?php echo esc_html($tag->name); ?></a>
             <?php endforeach; ?>
           </div>
         <?php endif; ?>
       </main>
 
       <!-- Sidebar -->
-      <aside class="aba-sidebar">
-        <div class="aba-sidebar-widget">
-          <h3 class="aba-widget-title">Latest Articles</h3>
-          <ul class="aba-sidebar-list">
+      <aside class="abm-sidebar">
+        <div class="abm-sidebar-widget">
+          <h3 class="abm-widget-title">Latest Articles</h3>
+          <ul class="abm-sidebar-list">
             <?php
             $current_id = get_the_ID();
             $recent_query = new WP_Query(array(
@@ -363,8 +363,8 @@ get_header();
             if ($recent_query->have_posts()) :
               while ($recent_query->have_posts()) : $recent_query->the_post();
             ?>
-                <li class="aba-sidebar-item">
-                  <div class="aba-sidebar-thumb">
+                <li class="abm-sidebar-item">
+                  <div class="abm-sidebar-thumb">
                     <?php if (has_post_thumbnail()) : ?>
                       <?php the_post_thumbnail('thumbnail'); ?>
                     <?php else : ?>
@@ -377,11 +377,11 @@ get_header();
                       </div>
                     <?php endif; ?>
                   </div>
-                  <div class="aba-sidebar-info">
-                    <h4 class="aba-sidebar-post-title">
+                  <div class="abm-sidebar-info">
+                    <h4 class="abm-sidebar-post-title">
                       <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                     </h4>
-                    <span class="aba-sidebar-date"><?php echo get_the_date('M j, Y'); ?></span>
+                    <span class="abm-sidebar-date"><?php echo get_the_date('M j, Y'); ?></span>
                   </div>
                 </li>
             <?php

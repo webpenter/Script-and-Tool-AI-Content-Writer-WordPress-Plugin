@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 $settings = WebPenter_ABM_Settings::get_settings();
 $cron_info = WebPenter_ABM_Cron::get_cron_info();
-$active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general';
+$active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'general';
 ?>
 
 <div class="wrap abm-modern-wrap">
@@ -24,12 +24,12 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
   <?php settings_errors(); ?>
 
   <?php if (isset($_GET['generation_result'])): ?>
-    <div class="abm-alert abm-alert-<?php echo esc_attr($_GET['generation_result'] === 'success' ? 'success' : 'error'); ?>">
+    <div class="abm-alert abm-alert-<?php echo esc_attr(wp_unslash($_GET['generation_result']) === 'success' ? 'success' : 'error'); ?>">
       <div class="abm-alert-icon">
-        <?php echo $_GET['generation_result'] === 'success' ? '✅' : '⚠️'; ?>
+        <?php echo wp_unslash($_GET['generation_result']) === 'success' ? '✅' : '⚠️'; ?>
       </div>
       <div class="abm-alert-text">
-        <?php echo esc_html(urldecode($_GET['generation_message'])); ?>
+        <?php echo esc_html(urldecode(wp_unslash($_GET['generation_message']))); ?>
       </div>
     </div>
   <?php endif; ?>

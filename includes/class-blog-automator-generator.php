@@ -128,7 +128,7 @@ class WebPenter_ABM_Generator
         'post_content'  => $content,
         'post_status'   => 'publish',
         'post_type'     => sanitize_text_field($settings['post_type']),
-        'post_author'   => 1
+        'post_author'   => get_current_user_id() ? get_current_user_id() : (get_users(array('role' => 'administrator'))[0]->ID ?? 1)
     );
 
     $post_id = wp_insert_post($post_data, true);
@@ -391,19 +391,23 @@ class WebPenter_ABM_Generator
     }
 
     // Hugging face returns raw binary image data (JPEG)
-    // We need to save this to a temporary file locally and return the file path or URL
+    // We need to save this to a temporary file locally
     $upload_dir = wp_upload_dir();
     $temp_filename = 'hf-img-' . time() . '-' . wp_rand(1000, 9999) . '.jpg';
     $temp_file_path = $upload_dir['path'] . '/' . $temp_filename;
     
-    $put_res = file_put_contents($temp_file_path, $body_content);
-    if ($put_res === false) {
+    global $wp_filesystem;
+    if (empty($wp_filesystem)) {
+        require_once(ABSPATH . '/wp-admin/includes/file.php');
+        WP_Filesystem();
+    }
+    
+    if (!$wp_filesystem->put_contents($temp_file_path, $body_content)) {
         return new WP_Error('file_write_error', 'Failed to save generated image to disk.');
     }
     
-    // Return the local URL so upload_image_to_media_library can sideload it 
-    // (upload_image_to_media_library uses download_url which works with local URLs too)
-    return $upload_dir['url'] . '/' . $temp_filename;
+    // Return the local file path prepended with a special marker so upload_image_to_media_library can handle it directly
+    return 'local_path:' . $temp_file_path;
   }
 
   private static function upload_image_to_media_library($image_url, $post_id, $desc)
@@ -413,8 +417,12 @@ class WebPenter_ABM_Generator
     require_once(ABSPATH . 'wp-admin/includes/image.php');
 
     // Download file to temp dir
-    $tmp = download_url($image_url);
-    if (is_wp_error($tmp)) return $tmp;
+    if (strpos($image_url, 'local_path:') === 0) {
+        $tmp = str_replace('local_path:', '', $image_url);
+    } else {
+        $tmp = download_url($image_url);
+        if (is_wp_error($tmp)) return $tmp;
+    }
 
     $file_array = array(
       'name' => 'auto-gen-' . wp_generate_password(8, false) . '.jpg',
@@ -425,7 +433,7 @@ class WebPenter_ABM_Generator
     
     // Remove temp file if error
     if (is_wp_error($id)) {
-        @unlink($file_array['tmp_name']);
+        wp_delete_file($file_array['tmp_name']);
     }
 
     return $id;

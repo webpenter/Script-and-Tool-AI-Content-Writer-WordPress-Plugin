@@ -1,9 +1,9 @@
 === WebPenter AI Blog Master ===
 Contributors: webpenter
 Donate link: https://webpenter.com/
-Tags: ai, blog, automation, openai, content
+Tags: ai, blog, automation, content
 Requires at least: 5.8
-Tested up to: 7.0
+Tested up to: 6.5
 Requires PHP: 7.4
 Stable tag: 1.0.8
 License: GPLv2 or later
@@ -43,6 +43,16 @@ Take your automation to the next level with WebPenter AI Blog Master Pro:
 
 [Upgrade to Pro and Save Hours of Work →](https://webpenter.com/webpenter-ai-blog-master/)
 
+== External Services ==
+
+This plugin relies on the following third-party external services to function:
+
+* **Google Gemini API**: Used to generate blog post content. Data sent: Your prompt and blog post topics. [Terms of Service](https://policies.google.com/terms) | [Privacy Policy](https://policies.google.com/privacy)
+* **Groq API**: Used as an alternative engine to generate blog post content. Data sent: Your prompt and blog post topics. [Terms of Service](https://groq.com/terms-of-use/) | [Privacy Policy](https://groq.com/privacy-policy/)
+* **Hugging Face API**: Used to generate featured images for your blog posts. Data sent: Blog post titles and image keywords. [Terms of Service](https://huggingface.co/terms-of-service) | [Privacy Policy](https://huggingface.co/privacy)
+* **Pixabay API**: Used to search and download free stock images for featured images. Data sent: Image search keywords. [Terms of Service](https://pixabay.com/service/terms/) | [Privacy Policy](https://pixabay.com/service/privacy/)
+* **Unsplash API**: Used as an alternative to search and download free stock images. Data sent: Image search keywords. [Terms of Service](https://unsplash.com/terms) | [Privacy Policy](https://unsplash.com/privacy)
+
 == Installation ==
 
 1. Log in to your WordPress dashboard.
@@ -79,7 +89,7 @@ Absolutely. Use the "Monetization" section in settings to add your Amazon, Adsen
 = 1.0.7 - 2026-05-21 =
 * Fixed: Manual "Generate Post Now" now increments the total posts generated counter.
 * Added: Logs submenu page for viewing and clearing generation error history.
-* Tested up to WordPress 7.0.
+* Tested up to WordPress 6.5.
 
 = 1.0.0 - 2025-11-26 =
 * Initial release with Google Gemini integration.

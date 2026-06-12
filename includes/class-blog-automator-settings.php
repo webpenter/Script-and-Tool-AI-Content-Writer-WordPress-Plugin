@@ -71,7 +71,7 @@ class WebPenter_ABM_Settings
     if (!current_user_can('manage_options')) return;
     check_admin_referer('webpenter_abm_clear_errors');
     delete_option(self::ERRORS_OPTION);
-    wp_safe_redirect(add_query_arg(array('page' => self::LOGS_PAGE_SLUG, 'errors_cleared' => '1'), admin_url('admin.php')));
+    wp_safe_redirect(add_query_arg(array('page' => self::LOGS_PAGE_SLUG, 'errors_cleared' => '1', '_wpnonce' => wp_create_nonce('webpenter_abm_errors_feedback')), admin_url('admin.php')));
     exit;
   }
 

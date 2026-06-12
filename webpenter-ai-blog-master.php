@@ -2,11 +2,10 @@
 
 /**
  * Plugin Name: WebPenter AI Blog Master
- * Plugin URI: https://webpenter.com/
  * Description: Automatically generates and publishes SEO-optimized blog posts using AI (Google Gemini or Groq) & Pixabay API. Custom built by Fayyaz Ahmad.
  * Version: 1.0.8
- * Author: Fayyaz Ahmad @ WebPenter
- * Author URI: https://webpenter.com/
+ * Author: Webpenter Software House
+ * Author URI: https://profiles.wordpress.org/webpenter/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: webpenter-ai-blog-master

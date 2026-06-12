@@ -14,7 +14,7 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
   <div class="abm-header-banner">
     <div class="abm-header-content">
       <div class="abm-header-title">
-        <h1>✨ AI Blog Master</h1>
+        <h1>✨ WebPenter AI Blog Master</h1>
         <span class="abm-badge">v1.0.8</span>
       </div>
       <p class="abm-header-subtitle">Created by <strong>Fayyaz Ahmad</strong> @ <strong>WebPenter</strong></p>
@@ -38,16 +38,16 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
     
     <!-- Tab Navigation -->
     <div class="abm-nav-tabs">
-      <a href="?page=ai-blog-master-settings&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'active' : ''; ?>">
+      <a href="?page=webpenter-ai-blog-master-settings&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'active' : ''; ?>">
         <span class="dashicons dashicons-admin-settings"></span> General
       </a>
-      <a href="?page=ai-blog-master-settings&tab=automation" class="nav-tab <?php echo $active_tab == 'automation' ? 'active' : ''; ?>">
+      <a href="?page=webpenter-ai-blog-master-settings&tab=automation" class="nav-tab <?php echo $active_tab == 'automation' ? 'active' : ''; ?>">
         <span class="dashicons dashicons-update-alt"></span> Automation
       </a>
-      <a href="?page=ai-blog-master-settings&tab=content" class="nav-tab <?php echo $active_tab == 'content' ? 'active' : ''; ?>">
+      <a href="?page=webpenter-ai-blog-master-settings&tab=content" class="nav-tab <?php echo $active_tab == 'content' ? 'active' : ''; ?>">
         <span class="dashicons dashicons-welcome-write-blog"></span> Content Strategy
       </a>
-      <a href="?page=ai-blog-master-logs" class="nav-tab">
+      <a href="?page=webpenter-ai-blog-master-settings&tab=logs" class="nav-tab <?php echo $active_tab == 'logs' ? 'active' : ''; ?>">
         <span class="dashicons dashicons-clipboard"></span> Logs
       </a>
     </div>
@@ -111,19 +111,65 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
 
           <div class="abm-card">
             <div class="abm-card-icon">🖼️</div>
-            <h3 class="abm-card-title">Pixabay API (Images)</h3>
-            <p class="abm-desc">Automatically fetches related royalty-free images.</p>
+            <h3 class="abm-card-title">Image Engine</h3>
+            <p class="abm-desc">Choose how to source featured images for your posts.</p>
             <div class="abm-field">
-              <label>API Key</label>
+              <label>Source</label>
+              <div class="abm-select-wrapper">
+                <select name="webpenter_abm_settings[image_source]" id="abm-image-source">
+                  <option value="pixabay" <?php selected($settings['image_source'], 'pixabay'); ?>>Pixabay (Stock Photos)</option>
+                  <option value="unsplash" <?php selected($settings['image_source'], 'unsplash'); ?>>Unsplash (High-Res Stock)</option>
+                  <option value="huggingface" <?php selected($settings['image_source'], 'huggingface'); ?>>Hugging Face (Free AI Generated)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Pixabay Key -->
+            <div class="abm-sub-field abm-image-key" id="abm-pixabay-key-wrapper" style="<?php echo $settings['image_source'] !== 'pixabay' ? 'display:none;' : ''; ?>">
+              <label>Pixabay API Key</label>
               <div class="abm-password-field">
                 <input type="password" name="webpenter_abm_settings[pixabay_api_key]" value="<?php echo esc_attr($settings['pixabay_api_key']); ?>" placeholder="Enter Pixabay API Key...">
                 <button type="button" class="abm-toggle-password">Show</button>
               </div>
-              <div class="abm-test-wrapper" style="margin-top: 10px;">
-                <button type="button" class="abm-test-api button" data-provider="pixabay">Test Connection</button>
-                <span class="abm-test-result"></span>
+              <p class="abm-help"><a href="https://pixabay.com/api/docs/" target="_blank">Get free key →</a></p>
+            </div>
+
+            <!-- Unsplash Key -->
+            <div class="abm-sub-field abm-image-key" id="abm-unsplash-key-wrapper" style="<?php echo $settings['image_source'] !== 'unsplash' ? 'display:none;' : ''; ?>">
+              <label>Unsplash Access Key</label>
+              <div class="abm-password-field">
+                <input type="password" name="webpenter_abm_settings[unsplash_api_key]" value="<?php echo esc_attr($settings['unsplash_api_key']); ?>" placeholder="Enter Unsplash Access Key...">
+                <button type="button" class="abm-toggle-password">Show</button>
               </div>
-              <p class="abm-help"><a href="https://pixabay.com/api/docs/" target="_blank">Get your free key here →</a></p>
+              <p class="abm-help"><a href="https://unsplash.com/developers" target="_blank">Get free key →</a></p>
+            </div>
+
+            <!-- Hugging Face Key -->
+            <div class="abm-sub-field abm-image-key" id="abm-huggingface-key-wrapper" style="<?php echo $settings['image_source'] !== 'huggingface' ? 'display:none;' : ''; ?>">
+              <label>Hugging Face Access Token</label>
+              <div class="abm-password-field">
+                <input type="password" name="webpenter_abm_settings[huggingface_api_key]" value="<?php echo esc_attr(isset($settings['huggingface_api_key']) ? $settings['huggingface_api_key'] : ''); ?>" placeholder="Enter Hugging Face Token...">
+                <button type="button" class="abm-toggle-password">Show</button>
+              </div>
+              <p class="abm-help"><a href="https://huggingface.co/settings/tokens" target="_blank">Get free token →</a></p>
+            </div>
+
+            <!-- AI Style -->
+            <div class="abm-sub-field" id="abm-ai-style-wrapper" style="<?php echo $settings['image_source'] !== 'huggingface' ? 'display:none;' : ''; ?>">
+              <label>AI Generation Style</label>
+              <div class="abm-select-wrapper">
+                <select name="webpenter_abm_settings[ai_image_style]">
+                  <option value="photorealistic" <?php selected($settings['ai_image_style'], 'photorealistic'); ?>>Photorealistic</option>
+                  <option value="digital-art" <?php selected($settings['ai_image_style'], 'digital-art'); ?>>Digital Art</option>
+                  <option value="cinematic" <?php selected($settings['ai_image_style'], 'cinematic'); ?>>Cinematic</option>
+                  <option value="anime" <?php selected($settings['ai_image_style'], 'anime'); ?>>Anime/Manga</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="abm-test-wrapper" style="margin-top: 15px;">
+                <button type="button" class="abm-test-api button" data-provider="image-test">Test Connection</button>
+                <span class="abm-test-result"></span>
             </div>
           </div>
         </div>
@@ -199,23 +245,44 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
 
         <div class="abm-card">
           <h3 class="abm-card-title">🕒 Schedule Configuration</h3>
-          <div class="abm-schedule-flex">
-            <div class="abm-field">
-              <label>Posting Frequency</label>
-              <div class="abm-select-wrapper">
-                <select name="webpenter_abm_settings[schedule_frequency]">
-                  <option value="custom" <?php selected($settings['schedule_frequency'], 'custom'); ?>>⚙️ Custom Schedule</option>
-                  <option value="minutely" <?php selected($settings['schedule_frequency'], 'minutely'); ?>>Every Minute</option>
-                  <option value="hourly" <?php selected($settings['schedule_frequency'], 'hourly'); ?>>Hourly</option>
-                  <option value="daily" <?php selected($settings['schedule_frequency'], 'daily'); ?>>Daily</option>
-                </select>
+          <div class="abm-schedule-builder">
+            <div class="abm-schedule-flex">
+              <div class="abm-field">
+                <label>Posting Frequency</label>
+                <div class="abm-select-wrapper">
+                  <select name="webpenter_abm_settings[schedule_frequency]" id="abm-schedule-frequency">
+                    <option value="custom" <?php selected($settings['schedule_frequency'], 'custom'); ?>>⚙️ Custom Schedule</option>
+                    <option value="minutely" <?php selected($settings['schedule_frequency'], 'minutely'); ?>>Every Minute</option>
+                    <option value="hourly" <?php selected($settings['schedule_frequency'], 'hourly'); ?>>Hourly</option>
+                    <option value="daily" <?php selected($settings['schedule_frequency'], 'daily'); ?>>Daily</option>
+                  </select>
+                </div>
+              </div>
+              <div class="abm-field" id="abm-custom-interval-wrapper" style="<?php echo $settings['schedule_frequency'] !== 'custom' ? 'display:none;' : ''; ?>">
+                <label>Custom Interval (Seconds)</label>
+                <div class="abm-interval-inputs">
+                  <input type="number" name="webpenter_abm_settings[custom_interval_seconds]" id="abm-custom-seconds" value="<?php echo esc_attr($settings['custom_interval_seconds']); ?>" min="1">
+                  <span class="abm-unit">sec</span>
+                </div>
               </div>
             </div>
-            <div class="abm-field">
-              <label>Custom Interval (Seconds)</label>
-              <div class="abm-interval-inputs">
-                <input type="number" name="webpenter_abm_settings[custom_interval_seconds]" value="<?php echo esc_attr($settings['custom_interval_seconds']); ?>" min="1">
-                <span class="abm-unit">sec</span>
+
+            <div class="abm-schedule-presets" id="abm-presets-row" style="<?php echo $settings['schedule_frequency'] !== 'custom' ? 'display:none;' : ''; ?>">
+              <label>Quick Presets:</label>
+              <div class="abm-preset-buttons">
+                <button type="button" class="abm-preset-btn" data-sec="300">5 Mins</button>
+                <button type="button" class="abm-preset-btn" data-sec="1800">30 Mins</button>
+                <button type="button" class="abm-preset-btn" data-sec="3600">1 Hour</button>
+                <button type="button" class="abm-preset-btn" data-sec="21600">6 Hours</button>
+                <button type="button" class="abm-preset-btn" data-sec="43200">12 Hours</button>
+                <button type="button" class="abm-preset-btn" data-sec="86400">24 Hours</button>
+              </div>
+            </div>
+
+            <div class="abm-schedule-summary">
+              <div class="abm-summary-box">
+                <span class="abm-summary-icon">📢</span>
+                <span id="abm-schedule-summary-text">Your engine is set to generate posts <strong>every <?php echo esc_html($settings['custom_interval_seconds']); ?> seconds</strong>.</span>
               </div>
             </div>
           </div>
@@ -277,6 +344,33 @@ $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general
           </div>
         </div>
 
+      </div>
+
+      <!-- LOGS TAB -->
+      <div id="tab-logs" class="abm-tab-content <?php echo $active_tab == 'logs' ? 'active' : ''; ?>">
+        <?php
+          $recent_errors = WebPenter_ABM_Settings::get_recent_errors();
+          $error_count = count($recent_errors);
+        ?>
+        <div class="abm-card">
+          <h3 class="abm-card-title">Recent Errors</h3>
+          <?php if ($error_count > 0): ?>
+            <p class="abm-desc">Showing the last <?php echo absint($error_count); ?> error(s) from post generation and API requests.</p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <?php foreach (array_reverse($recent_errors) as $error): ?>
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;">
+                  <strong style="color: #475569; display: block; margin-bottom: 5px;"><?php echo esc_html(date_i18n('F j, Y g:i a', strtotime($error['time']))); ?></strong>
+                  <span style="color: #dc2626;"><?php echo esc_html($error['message']); ?></span>
+                </div>
+              <?php endforeach; ?>
+            </div>
+            <div style="margin-top: 15px;">
+              <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=webpenter_abm_clear_errors'), 'webpenter_abm_clear_errors')); ?>" class="abm-btn abm-btn-primary" style="background: #dc2626; color: white; text-decoration: none;">Clear Logs</a>
+            </div>
+          <?php else: ?>
+            <p class="abm-desc">No errors logged. When generation fails, details will appear here.</p>
+          <?php endif; ?>
+        </div>
       </div>
 
       <div class="abm-save-wrapper">

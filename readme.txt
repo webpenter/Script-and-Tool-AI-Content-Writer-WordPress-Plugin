@@ -1,11 +1,11 @@
-=== Script-and-Tool-AI-Content-Writer-WordPress-Plugin ===
+=== WebPenter AI Blog Master ===
 Contributors: webpenter
 Donate link: https://webpenter.com/
 Tags: ai, blog, automation, openai, content
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,374 +13,73 @@ Automatically generate and publish SEO-optimized blog posts using AI with custom
 
 == Description ==
 
-Script-and-Tool-AI-Content-Writer-WordPress-Plugin is a powerful WordPress plugin that leverages artificial intelligence to automatically create high-quality, SEO-optimized blog posts for your website. Perfect for content marketers, bloggers, and website owners who want to maintain a consistent posting schedule.
+WebPenter AI Blog Master is a professional-grade WordPress plugin that leverages advanced Artificial Intelligence (Google Gemini and Groq) to autonomously create high-quality, SEO-optimized blog posts. Designed for content marketers, niche site owners, and busy bloggers, it ensures your website remains fresh and authoritative with a consistent posting schedule.
+
+Unlike generic AI writers, WebPenter AI Blog Master integrates directly with Pixabay for automatic featured images and features a smart keyword rotation system to prevent content duplication.
 
 = Key Features (Free Version) =
 
-* **Unlimited Posts with Gemini** - Generate as many posts as you want using free Google Gemini AI
-* **Automated Content Generation** - Create full blog posts automatically using AI
-* **Daily Scheduling** - Automatic daily post generation with WordPress Cron
-* **Customizable Content** - Configure topics and keywords for diverse content
-* **SEO Optimization** - Built-in default prompt template designed for search engine friendly content
-* **Smart Publishing** - Publish immediately or save as drafts for review
-* **Intelligent Categories** - Auto-assigns to best matching category or creates new ones
-* **Manual Generation** - Create posts on-demand with a single click
-* **Error Logging** - Track generation issues and troubleshoot easily
-* **Statistics Dashboard** - Monitor total posts generated and scheduling status
-* **Free Google Gemini AI** - Uses Google Gemini (free tier available, no credit card required)
+* **Multi-Model Support** - Choose between Google Gemini (Free Tier) and Groq (High Speed).
+* **Automated Image Integration** - Fetches royalty-free featured images via Pixabay API.
+* **Granular Scheduling** - Define exactly how often you want new content, down to the second.
+* **SEO-First Approach** - Generates structured HTML (H1, H2, H3) designed for search engine visibility.
+* **Smart Category Management** - Automatically creates or assigns posts to relevant categories.
+* **Statistics Dashboard** - Track your growth with built-in post counters and logs.
+* **Manual "Run Now" Mode** - Need a post immediately? Generate one with a single click.
+* **Custom word counts** - Generate content from 300 to 5000 words.
+* **Affiliate Ready** - Automatically inject custom affiliate or ad code into every post.
 
 = Premium Features (Pro Version) =
 
-Upgrade to Pro for advanced capabilities:
+Take your automation to the next level with WebPenter AI Blog Master Pro:
 
-* **Multiple AI Providers** - Use OpenAI GPT-4o, Claude, or any custom AI endpoint
-* **Custom Post Lengths** - Set any word count from 300 to 5000 words with interactive slider
-* **Flexible Scheduling** - Post every 2, 3, 6 hours or custom intervals
-* **Multiple Categories & Tags** - Auto-assign up to 3 relevant categories and generate tags
-* **12+ Prompt Templates** - How-To guides, listicles, case studies, comparisons, and more
-* **Custom Prompt Template Editor** - Fully customize AI prompts to match your content style and requirements
-* **SEO Optimization** - Auto-generate meta descriptions (Yoast, Rank Math, AIOSEO compatible)
-* **Bulk Generation** - Create multiple posts at once from keyword list
+* **OpenAI & Claude Support** - Connect to GPT-4o, Claude 3.5 Sonnet, and more.
+* **Interactive Content Builder** - Visual slider for post lengths and scheduling.
+* **12+ Specialized Templates** - How-To guides, Listicles, Case Studies, and Product Comparisons.
+* **Custom Prompt Editor** - Full control over the AI's "brain" for unique brand voice.
+* **Bulk Generation** - Transform a list of 100+ keywords into a full blog library instantly.
+* **Advanced SEO Metadata** - Auto-fills Yoast, Rank Math, and AIOSEO descriptions.
+* **Multi-Category/Tag Support** - Assign multiple relevant categories and auto-generate tags.
 
-[Learn more about Pro features →](https://webpenter.com/script-and-tool-ai-content-writer-wordpress-plugin/)
-
-= How It Works =
-
-1. Get your free Google Gemini API key from aistudio.google.com
-2. Enter your API key in the plugin settings
-3. Add your desired topics and keywords (one per line)
-4. Configure post frequency and publishing preferences
-5. Let WordPress Cron automatically generate content on schedule
-6. Review drafts or publish automatically - your choice!
-
-= Perfect For =
-
-* Content marketers maintaining multiple blogs
-* Niche websites needing consistent content
-* Affiliate marketers building authority sites
-* Businesses wanting to improve SEO presence
-* Bloggers who want to scale content production
-
-= External Services Used =
-
-**IMPORTANT:** This plugin uses external services to generate content and images.
-
-= 1. AI Content Generation =
-
-This plugin requires an API key from an AI service provider to generate blog posts.
-
-**Why External Service is Required:**
-AI content generation requires large language models (LLMs) that run on powerful servers with specialized hardware. These models cannot run locally on a WordPress server due to:
-- Massive computational requirements (billions of parameters)
-- Specialized GPU infrastructure needed for inference
-- Continuous model updates and improvements
-- Resource-intensive processing that would overwhelm typical hosting environments
-
-The plugin sends your prompts to these external AI services where the actual content generation processing occurs on their servers.
-
-**Free Version:** Unlimited posts with Google Gemini AI
-
-**Service Used:** Google Gemini (https://ai.google.dev)
-- Free tier: 15 requests per minute
-- Fast and capable AI models
-- No credit card required for free tier
-- Get your API key: https://aistudio.google.com/app/apikey
-
-**Default API Endpoint:** https://generativelanguage.googleapis.com/v1/models
-
-**Terms of Use & Privacy Policy:**
-- Google Privacy Policy: https://policies.google.com/privacy
-- Google Gemini Terms: https://ai.google.dev/terms
-
-**Note:** The Pro version supports multiple AI providers (OpenAI, Claude, custom endpoints). When using Pro with other AI providers, refer to those providers' Terms of Use and Privacy Policy pages directly.
-
-**Data Transmitted:**
-- Your prompt text (including keywords)
-- Post generation requests
-- You control your own API key
-- No personal data is collected by this plugin
-
-**Pro Version AI Providers:**
-
-The Pro version supports multiple AI providers. When using Pro, data is transmitted to your selected provider:
-
-**OpenAI (GPT-4, GPT-3.5-turbo)**
-- Service: OpenAI (https://openai.com)
-- API Endpoint: https://api.openai.com/v1/chat/completions
-- Data transmitted: Your prompt text (including keywords) and API key
-- Privacy Policy: https://openai.com/policies/privacy-policy
-- Terms of Use: https://openai.com/policies/terms-of-use
-
-**Anthropic (Claude)**
-- Service: Anthropic (https://anthropic.com)
-- API Endpoint: https://api.anthropic.com/v1/messages
-- Data transmitted: Your prompt text (including keywords) and API key
-- Privacy Policy: https://www.anthropic.com/privacy
-- Terms of Use: https://www.anthropic.com/legal/consumer-terms
-
-**Azure OpenAI, LocalAI, Custom Endpoints**
-- Pro users can configure custom OpenAI-compatible API endpoints
-- When using custom endpoints, refer to those providers' Terms of Use and Privacy Policy pages directly
-
-= 2. Featured Images (Pixabay) =
-
-The plugin automatically fetches relevant featured images from Pixabay's free stock photo API.
-
-**Why External Service is Required:**
-Pixabay provides access to millions of high-quality, royalty-free stock photos that are properly licensed for commercial use.
-
-**Service:** Pixabay (https://pixabay.com)
-**API Endpoint:** https://pixabay.com/api/
-**Privacy Policy:** https://pixabay.com/service/privacy/
-**Terms of Service:** https://pixabay.com/service/terms/
-**License:** All photos are free to use under the Pixabay License
-
-**Requirements:**
-- Free Pixabay API key (get it at https://pixabay.com/api/docs/)
-- Register for a free Pixabay account
-
-**Data Transmitted:**
-- Search keyword only (based on your post topic)
-- No personal data is sent
-
-**Pro Version:** Pro users get multiple categories and auto-generated tags in addition to featured images.
-
-= Requirements =
-
-* WordPress 5.8 or higher
-* PHP 7.4 or higher
-* Free Google Gemini API key (https://aistudio.google.com/app/apikey)
-* Free Pixabay API key (https://pixabay.com/api/docs/)
-* Active WordPress Cron (standard on most hosts)
-
-= Documentation =
-
-Full documentation is available in the plugin's README.md file, including:
-* Detailed installation instructions
-* API configuration examples (OpenAI, Azure, LocalAI)
-* 9 ready-to-use prompt templates
-* Troubleshooting guide
-* Security best practices
+[Upgrade to Pro and Save Hours of Work →](https://webpenter.com/webpenter-ai-blog-master/)
 
 == Installation ==
 
-= Automatic Installation =
-
-1. Log in to your WordPress admin panel
-2. Navigate to Plugins → Add New
-3. Search for "Script-and-Tool-AI-Content-Writer-WordPress-Plugin"
-4. Click "Install Now" and then "Activate"
-
-= Manual Installation =
-
-1. Download the plugin ZIP file
-2. Log in to your WordPress admin panel
-3. Navigate to Plugins → Add New → Upload Plugin
-4. Choose the ZIP file and click "Install Now"
-5. Click "Activate Plugin"
-
-= Configuration =
-
-1. Go to the plugin settings page
-2. Enter your Google Gemini API key
-4. Configure your content preferences:
-   * Add keywords/topics (comma-separated)
-   * Choose post length
-   * Select category
-5. Set publishing preferences:
-   * Choose frequency (daily recommended)
-   * Select publish mode (draft or immediate)
-6. Click "Save Settings"
-7. Test with "Generate Post Now" button
-
-Note: Custom prompt template editing is available in the Pro version. Free version uses a pre-configured SEO-optimized template.
+1. Log in to your WordPress dashboard.
+2. Navigate to **Plugins > Add New**.
+3. Search for "WebPenter AI Blog Master".
+4. Click **Install Now** and then **Activate**.
+5. Go to the new "AI Blog Master" menu in your sidebar to begin configuration.
 
 == Frequently Asked Questions ==
 
-= Is this plugin really free? =
+= How do I get a Gemini API Key? =
+Visit [Google AI Studio](https://aistudio.google.com/app/apikey). It's free to use and usually takes less than 60 seconds to generate a key.
 
-Yes! The free version is fully functional and uses Google Gemini AI. You just need your own free Gemini API key from Google (no credit card required for free tier). Premium features are available for users who need OpenAI, Claude, custom AI endpoints, bulk generation, and advanced features.
+= Is the content really SEO-friendly? =
+Yes. The plugin uses a proprietary prompt structure that enforces semantic HTML (H1-H3 tags), logical flow, and keyword density optimized for modern search engines.
 
-= Do I need an API key? =
+= Can I use this for affiliate marketing? =
+Absolutely. Use the "Monetization" section in settings to add your Amazon, Adsense, or custom affiliate banners.
 
-Yes, you'll need a free API key from Google Gemini (https://aistudio.google.com/app/apikey) which is completely free and requires no credit card. The Pro version allows you to use OpenAI, Claude, or any custom AI endpoint.
+== Screenshots ==
 
-= Why is the free version limited to Gemini? =
-
-Google Gemini offers a generous free tier (15 requests per minute) with no credit card required, making it perfect for free users. Pro users can choose from any AI provider including OpenAI GPT-4o, Claude, or custom endpoints.
-
-= How much does it cost? =
-
-The plugin itself is free. Google Gemini has a generous free tier (15 requests/minute). For higher usage, Gemini paid tiers are available. Pro version supports OpenAI, Claude, and other providers with their respective pricing.
-
-= Can I review posts before they're published? =
-
-Absolutely! Set the publishing mode to "Save as Draft" and review each post before publishing manually.
-
-= What happens if the API fails? =
-
-The plugin includes comprehensive error handling. Failed generations are logged in the "Recent Errors" section of the settings page, and you'll receive details about what went wrong.
-
-= Can I use my own AI service? =
-
-The free version uses Google Gemini exclusively. Pro users can use any OpenAI-compatible API including OpenAI, Claude, Azure OpenAI, LocalAI, or custom endpoints. Configure your custom endpoint in Pro settings.
-
-= Will this work with other AI providers? =
-
-Yes, as long as they support the OpenAI chat completion format. Examples include Azure OpenAI, LocalAI, and various other providers.
-
-= Can I customize the writing style? =
-
-The free version uses a pre-configured SEO-optimized prompt template. Pro users can fully customize the prompt template using the Prompt Template Editor, and Pro includes 12+ ready-to-use templates for different content types (How-To guides, listicles, case studies, and more).
-
-= Does this require WP-Cron? =
-
-Yes, the plugin uses WordPress Cron for scheduling. This is enabled by default on most WordPress installations.
-
-= How do I stop automatic generation? =
-
-Simply deactivate the plugin, or change the frequency settings and save.
-
-= Is the generated content unique? =
-
-Yes, AI generates unique content each time. However, you should always review content for accuracy and quality before publishing.
-
-= Can I use this for multiple categories? =
-
-The free version supports one category. The Pro version includes multiple category support and automatic tag generation.
-
-= What if I run out of keywords? =
-
-The plugin analyzes your recent posts and selects the keyword that is most different from them, ensuring content variety. With even 5-10 keywords, you can generate diverse content indefinitely as the plugin automatically picks topics you haven't covered recently.
-
-= Does this support custom post types? =
-
-Currently, the plugin only supports standard WordPress posts. Custom post type support may be added in future versions.
-
-= Is multilingual content supported? =
-
-You can generate content in any language supported by your AI provider by writing prompts in that language.
+1. **The Dashboard** - A clean, modern interface to manage your AI content engine.
+2. **Content Strategy** - Easily manage your topics pool and monetization codes.
+3. **Automation Settings** - Flexible scheduling options to fit any strategy.
 
 == Changelog ==
 
+= 1.0.8 - 2026-06-11 =
+* Added: WebPenter branding for official WordPress.org compliance.
+* Improved: Schedule configuration now includes human-readable interval summaries.
+* Improved: Readme documentation and FAQ.
+* Fixed: Text domain consistency for translations.
+
 = 1.0.7 - 2026-05-21 =
 * Fixed: Manual "Generate Post Now" now increments the total posts generated counter.
-* Fixed: Redirect after manual generation returns to the correct plugin settings page.
-* Added: Loading state (spinner and disabled button) while a post is being generated manually.
 * Added: Logs submenu page for viewing and clearing generation error history.
-* Improved: External Services notice moved below the Save Settings button.
-* Improved: SEO Optimization section layout when using Pro (How It Works and important notices shown first).
 * Tested up to WordPress 7.0.
 
-= 1.0.6 - 2026-05-10 =
- * Fixed: With AI Blog Master Pro active, saving settings no longer overwrote the stored AI API endpoint when the provider form did not submit a separate endpoint field.
-
-= 1.0.5 - 2026-05-09 =
-* Added: New compatibility hook to the generator.
-
-= 1.0.4 - 2026-05-04 =
- * Fixed: Generating a post without an image API key no longer logs a featured-image error; the image step is skipped quietly.
-
-= 1.0.3 - 2026-05-03 =
- * Changed: Image API key is no longer a required HTML field on the settings form, so you can save settings without it.
- * Improved: Clearer wording that the key is optional for saving but still needed for featured images to work.
-
-= 1.0.2 - 2026-02-17 =
-* Added: SEO Optimization settings section for Pro plugin
-* Added: Hook for Pro plugin to display internal linking settings
-* Improved: Better integration with Pro plugin advanced features
-
-= 1.0.1 - 2026-02-17 =
-* Fixed: Added missing action hook for Pro plugin AI provider selector
-* Fixed: Pro AI provider selector now displays correctly above API key field
-* Fixed: Removed conflicting Pro conditional that prevented Pro UI from rendering
-* Fixed: Pro features now fully visible when license is activated
-
 = 1.0.0 - 2025-11-26 =
-* Initial release
- * AI-powered post generation with Google Gemini API (free tier available)
-* Automatic daily scheduling with WordPress Cron
-* Draft and publish modes
-* Pre-configured SEO-optimized prompt template (custom editing in Pro)
-* Error logging and tracking
-* Statistics dashboard
-* Manual post generation
-* Intelligent category assignment
- * Automatic featured images from Pixabay
-* Smart keyword selection based on recent posts
-* WordPress Cron integration
-* Security: Nonce verification, capability checks, input sanitization
-* Comprehensive documentation
-
-== Upgrade Notice ==
-
-= 1.0.7 =
-Fixes manual post generation counter and redirect; adds a generating indicator on Generate Post Now; dismissible recent errors; cleaner settings page layout. Tested with WordPress 7.0.
-
-= 1.0.6 =
-Pro users: update so your chosen AI provider endpoint is preserved when you save settings (fixes wrong host / invalid API key style errors after save).
-
-= 1.0.4 =
-Posts generate cleanly without an image API key; featured images are only fetched when a key is saved.
-
-= 1.0.3 =
-You can save plugin settings without an image API key; add a key when you want automatic featured images.
-
-= 1.0.0 =
-Initial release of AI Blog Master. Automatically generate SEO-optimized blog posts using AI!
-
-== Privacy Policy ==
-
-This plugin does not collect, store, or transmit any user data from your WordPress installation, except what is necessary for its core functionality:
-
-**What data is transmitted:**
-- Your configured prompt template (including keywords)
-- Basic API request parameters
-
-**Where data is sent:**
-- To your configured AI API endpoint (by default: Google Gemini API)
-- No data is sent to the plugin developers
-- No tracking or analytics are performed by this plugin
-
-**Data storage:**
-- Plugin settings are stored in your WordPress database
-- Generated posts are stored as standard WordPress posts
-- No data is transmitted to third parties except your chosen AI provider
-
-**Your responsibilities:**
-- You control what data is sent via prompt templates
-- You are responsible for compliance with your AI provider's terms
-- Review generated content before publishing
-- Ensure compliance with privacy laws in your jurisdiction
-
-**Third-party services:**
-- Google Privacy Policy: https://policies.google.com/privacy
-- Google Gemini Terms: https://ai.google.dev/terms
-- Pixabay Privacy Policy: https://pixabay.com/service/privacy/
-- Pixabay Terms of Service: https://pixabay.com/service/terms/
-- Note: Pro version supports additional AI providers (OpenAI, Claude, etc.) - when using Pro with other providers, refer to those providers' Terms of Use and Privacy Policy pages directly
-
-== Support ==
-
-For support, please visit:
-* Plugin documentation (included in download)
-* WordPress.org support forums
-* GitHub repository (if applicable)
-
-== Credits ==
-
-Developed with WordPress coding standards and best practices. Uses OpenAI API or compatible services for content generation.
-
-== Additional Notes ==
-
-**API Costs:** Be aware of API usage costs from your AI provider. Monitor your usage dashboard and set billing alerts.
-
-**Content Quality:** AI-generated content should be reviewed for accuracy, quality, and brand alignment before publishing.
-
-**SEO Considerations:** While the plugin is optimized for SEO-friendly content, you should still review and optimize posts with your preferred SEO plugin.
-
-**Legal Compliance:** Ensure your use of AI-generated content complies with relevant laws and regulations in your jurisdiction.
-
-**Backup Regularly:** As with any automation tool, maintain regular backups of your WordPress site.
-
-
+* Initial release with Google Gemini integration.

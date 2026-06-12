@@ -10,7 +10,7 @@ class WebPenter_ABM_Settings
 {
   const OPTION_NAME = 'webpenter_abm_settings';
   const ERRORS_OPTION = 'webpenter_abm_errors';
-  const LOGS_PAGE_SLUG = 'ai-blog-master-logs';
+  const LOGS_PAGE_SLUG = 'webpenter-ai-blog-master-logs';
 
   public static function init_error_handlers()
   {
@@ -78,10 +78,10 @@ class WebPenter_ABM_Settings
   public static function add_admin_menu()
   {
     add_menu_page(
-      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-master'),
-      __('Script-and-Tool-AI-Content-Writer-WordPress-Plugin', 'ai-blog-master'),
+      __('WebPenter AI Blog Master', 'webpenter-ai-blog-master'),
+      __('WebPenter AI Blog Master', 'webpenter-ai-blog-master'),
       'manage_options',
-      'ai-blog-master-settings',
+      'webpenter-ai-blog-master-settings',
       array(__CLASS__, 'render_settings_page'),
       'dashicons-edit',
       30
@@ -91,14 +91,14 @@ class WebPenter_ABM_Settings
   public static function add_logs_menu()
   {
     $error_count = count(self::get_recent_errors());
-    $logs_menu_title = __('Logs', 'ai-blog-master');
+    $logs_menu_title = __('Logs', 'webpenter-ai-blog-master');
     if ($error_count > 0) {
       $logs_menu_title .= sprintf(' <span class="awaiting-mod"><span class="pending-count">%d</span></span>', $error_count);
     }
     
     add_submenu_page(
-      'ai-blog-master-settings',
-      __('Logs & Debug', 'ai-blog-master'),
+      'webpenter-ai-blog-master-settings',
+      __('Logs & Debug', 'webpenter-ai-blog-master'),
       $logs_menu_title,
       'manage_options',
       self::LOGS_PAGE_SLUG,
@@ -120,8 +120,8 @@ class WebPenter_ABM_Settings
   public static function enqueue_admin_styles($hook)
   {
     $allowed_hooks = array(
-      'toplevel_page_ai-blog-master-settings',
-      'ai-blog-master_page_' . self::LOGS_PAGE_SLUG,
+      'toplevel_page_webpenter-ai-blog-master-settings',
+      'webpenter-ai-blog-master_page_' . self::LOGS_PAGE_SLUG,
     );
     if (!in_array($hook, $allowed_hooks, true)) return;
 
@@ -146,7 +146,11 @@ class WebPenter_ABM_Settings
       'ai_provider' => 'gemini',
       'gemini_api_key' => '',
       'groq_api_key' => '',
+      'image_source' => 'pixabay',
       'pixabay_api_key' => '',
+      'unsplash_api_key' => '',
+      'huggingface_api_key' => '',
+      'ai_image_style' => 'photorealistic',
       'automation_status' => 'disabled',
       'post_type' => 'blog',
       'posts_per_batch' => 2,
@@ -178,7 +182,13 @@ class WebPenter_ABM_Settings
     $sanitized['ai_provider'] = isset($input['ai_provider']) && $input['ai_provider'] === 'groq' ? 'groq' : 'gemini';
     $sanitized['gemini_api_key'] = isset($input['gemini_api_key']) ? sanitize_text_field($input['gemini_api_key']) : '';
     $sanitized['groq_api_key'] = isset($input['groq_api_key']) ? sanitize_text_field($input['groq_api_key']) : '';
+    
+    $sanitized['image_source'] = isset($input['image_source']) ? sanitize_text_field($input['image_source']) : 'pixabay';
     $sanitized['pixabay_api_key'] = isset($input['pixabay_api_key']) ? sanitize_text_field($input['pixabay_api_key']) : '';
+    $sanitized['unsplash_api_key'] = isset($input['unsplash_api_key']) ? sanitize_text_field($input['unsplash_api_key']) : '';
+    $sanitized['huggingface_api_key'] = isset($input['huggingface_api_key']) ? sanitize_text_field($input['huggingface_api_key']) : '';
+    $sanitized['ai_image_style'] = isset($input['ai_image_style']) ? sanitize_text_field($input['ai_image_style']) : 'photorealistic';
+
     $sanitized['automation_status'] = isset($input['automation_status']) && $input['automation_status'] === 'enabled' ? 'enabled' : 'disabled';
     $sanitized['post_type'] = isset($input['post_type']) ? sanitize_text_field($input['post_type']) : 'blog';
     $sanitized['posts_per_batch'] = isset($input['posts_per_batch']) ? absint($input['posts_per_batch']) : 2;

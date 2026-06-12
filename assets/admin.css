@@ -1,23 +1,26 @@
 .abm-modern-wrap {
-  margin: 20px 20px 0 0;
+  margin: 10px 20px 0 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #1e293b;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
 }
 
 .abm-modern-wrap * {
   box-sizing: border-box;
 }
 
-/* Header Banner */
 .abm-header-banner {
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   border-radius: 12px;
-  padding: 30px;
-  margin-bottom: 30px;
+  padding: 20px 30px;
+  margin-bottom: 20px;
   color: #fff;
   box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.3);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .abm-header-banner::before {
@@ -71,13 +74,25 @@
 /* Container & Tabs */
 .abm-container {
   background: transparent;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+#abm-settings-form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .abm-nav-tabs {
   display: flex;
   gap: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   border-bottom: 2px solid #e2e8f0;
+  flex-shrink: 0;
 }
 
 .abm-nav-tabs .nav-tab {
@@ -109,6 +124,9 @@
 .abm-tab-content {
   display: none;
   animation: fadeIn 0.3s ease;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .abm-tab-content.active {
@@ -494,9 +512,88 @@ input:checked + .abm-slider:before {
 }
 
 .abm-save-wrapper {
-  margin-top: 30px;
-  padding-top: 20px;
+  margin-top: 15px;
+  padding-top: 15px;
   border-top: 1px solid #e2e8f0;
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
 }
+
+/* Schedule Builder Styles */
+.abm-schedule-builder {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.abm-schedule-presets {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.abm-schedule-presets label {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.abm-preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.abm-preset-btn {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #475569;
+}
+
+.abm-preset-btn:hover {
+  border-color: #4f46e5;
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.05);
+}
+
+.abm-preset-btn.active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #fff;
+}
+
+.abm-schedule-summary {
+  margin-top: 20px;
+}
+
+.abm-summary-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1e40af;
+  font-size: 14px;
+}
+
+.abm-summary-icon {
+  font-size: 18px;
+}
+
+.abm-summary-box strong {
+  font-weight: 700;
+  text-decoration: underline;
+}
+

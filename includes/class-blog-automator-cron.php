@@ -23,14 +23,14 @@ class WebPenter_ABM_Cron
     $custom_seconds = isset($settings['custom_interval_seconds']) ? absint($settings['custom_interval_seconds']) : 60;
     if ($custom_seconds < 60) $custom_seconds = 60;
 
-    $schedules['abm_custom_interval'] = array(
+    $schedules['webpenter_abm_custom_interval'] = array(
       'interval' => $custom_seconds,
-      'display'  => sprintf(__('Custom (%d seconds)', 'ai-blog-master'), $custom_seconds)
+      'display'  => sprintf(__('Custom (%d seconds)', 'webpenter-ai-blog-master'), $custom_seconds)
     );
 
     $schedules['minutely'] = array(
       'interval' => 60,
-      'display'  => __('Every Minute', 'ai-blog-master')
+      'display'  => __('Every Minute', 'webpenter-ai-blog-master')
     );
 
     return $schedules;
@@ -48,7 +48,7 @@ class WebPenter_ABM_Cron
     $cron_schedule = '';
 
     if ($frequency === 'custom') {
-        $cron_schedule = 'abm_custom_interval';
+        $cron_schedule = 'webpenter_abm_custom_interval';
     } elseif ($frequency === 'minutely') {
         $cron_schedule = 'minutely';
     } elseif ($frequency === 'hourly') {
@@ -100,12 +100,12 @@ class WebPenter_ABM_Cron
     // Check if new errors occurred
     if ($final_errors > $initial_errors) {
         wp_safe_redirect(add_query_arg(
-          array('page' => 'ai-blog-master-settings', 'generation_result' => 'error', 'generation_message' => urlencode('Batch execution finished, but there were errors. Check Logs.')),
+          array('page' => 'webpenter-ai-blog-master-settings', 'generation_result' => 'error', 'generation_message' => urlencode('Batch execution finished, but there were errors. Check Logs.')),
           admin_url('admin.php')
         ));
     } else {
         wp_safe_redirect(add_query_arg(
-          array('page' => 'ai-blog-master-settings', 'generation_result' => 'success', 'generation_message' => urlencode('Batch execution completed successfully!')),
+          array('page' => 'webpenter-ai-blog-master-settings', 'generation_result' => 'success', 'generation_message' => urlencode('Batch execution completed successfully!')),
           admin_url('admin.php')
         ));
     }

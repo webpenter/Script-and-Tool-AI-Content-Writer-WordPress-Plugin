@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Plugin Name: AI Blog Master
+ * Plugin Name: WebPenter AI Blog Master
  * Plugin URI: https://webpenter.com/
  * Description: Automatically generates and publishes SEO-optimized blog posts using AI (Google Gemini or Groq) & Pixabay API. Custom built by Fayyaz Ahmad.
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Fayyaz Ahmad @ WebPenter
  * Author URI: https://webpenter.com/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: ai-blog-master
+ * Text Domain: webpenter-ai-blog-master
  * Domain Path: /languages
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -19,7 +19,7 @@
 defined('ABSPATH') || exit;
 
 // Define plugin constants
-define('WEBPENTER_ABM_VERSION', '1.0.7');
+define('WEBPENTER_ABM_VERSION', '1.0.8');
 define('WEBPENTER_ABM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WEBPENTER_ABM_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WEBPENTER_ABM_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -104,8 +104,8 @@ class WebPenter_ABM_Main
   {
     $settings_link = sprintf(
       '<a href="%s">%s</a>',
-      admin_url('admin.php?page=ai-blog-master-settings'),
-      __('Settings', 'ai-blog-master')
+      admin_url('admin.php?page=webpenter-ai-blog-master-settings'),
+      __('Settings', 'webpenter-ai-blog-master')
     );
     array_unshift($links, $settings_link);
     return $links;
@@ -121,20 +121,20 @@ class WebPenter_ABM_Main
     }
 
     $labels = array(
-        'name'                  => _x('Blogs', 'Post type general name', 'ai-blog-master'),
-        'singular_name'         => _x('Blog', 'Post type singular name', 'ai-blog-master'),
-        'menu_name'             => _x('Blogs', 'Admin Menu text', 'ai-blog-master'),
-        'name_admin_bar'        => _x('Blog', 'Add New on Toolbar', 'ai-blog-master'),
-        'add_new'               => __('Add New', 'ai-blog-master'),
-        'add_new_item'          => __('Add New Blog', 'ai-blog-master'),
-        'new_item'              => __('New Blog', 'ai-blog-master'),
-        'edit_item'             => __('Edit Blog', 'ai-blog-master'),
-        'view_item'             => __('View Blog', 'ai-blog-master'),
-        'all_items'             => __('All Blogs', 'ai-blog-master'),
-        'search_items'          => __('Search Blogs', 'ai-blog-master'),
-        'parent_item_colon'     => __('Parent Blogs:', 'ai-blog-master'),
-        'not_found'             => __('No blogs found.', 'ai-blog-master'),
-        'not_found_in_trash'    => __('No blogs found in Trash.', 'ai-blog-master'),
+        'name'                  => _x('Blogs', 'Post type general name', 'webpenter-ai-blog-master'),
+        'singular_name'         => _x('Blog', 'Post type singular name', 'webpenter-ai-blog-master'),
+        'menu_name'             => _x('Blogs', 'Admin Menu text', 'webpenter-ai-blog-master'),
+        'name_admin_bar'        => _x('Blog', 'Add New on Toolbar', 'webpenter-ai-blog-master'),
+        'add_new'               => __('Add New', 'webpenter-ai-blog-master'),
+        'add_new_item'          => __('Add New Blog', 'webpenter-ai-blog-master'),
+        'new_item'              => __('New Blog', 'webpenter-ai-blog-master'),
+        'edit_item'             => __('Edit Blog', 'webpenter-ai-blog-master'),
+        'view_item'             => __('View Blog', 'webpenter-ai-blog-master'),
+        'all_items'             => __('All Blogs', 'webpenter-ai-blog-master'),
+        'search_items'          => __('Search Blogs', 'webpenter-ai-blog-master'),
+        'parent_item_colon'     => __('Parent Blogs:', 'webpenter-ai-blog-master'),
+        'not_found'             => __('No blogs found.', 'webpenter-ai-blog-master'),
+        'not_found_in_trash'    => __('No blogs found in Trash.', 'webpenter-ai-blog-master'),
     );
 
     $args = array(
@@ -220,7 +220,7 @@ function webpenter_abm_activate()
   WebPenter_ABM_Cron::schedule_event();
 
   if (defined('WP_DEBUG') && WP_DEBUG) {
-    error_log('AI Blog Master: Custom version activated.');
+    error_log('WebPenter AI Blog Master: Custom version activated.');
   }
 
   // Register post type and flush rewrite rules immediately so 404 errors don't occur
@@ -237,7 +237,7 @@ function webpenter_abm_deactivate()
 {
   WebPenter_ABM_Cron::clear_scheduled_event();
   if (defined('WP_DEBUG') && WP_DEBUG) {
-    error_log('AI Blog Master: Plugin deactivated.');
+    error_log('WebPenter AI Blog Master: Plugin deactivated.');
   }
 }
 register_deactivation_hook(__FILE__, 'webpenter_abm_deactivate');
